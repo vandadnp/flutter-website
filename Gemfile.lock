@@ -89,7 +89,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activesupport (~> 7.0.3)
+  activesupport (~> 7.0.4)
   jekyll (= 4.2.2)
   jekyll-toc (~> 0.17.1)
   liquid-tag-parser (~> 2.0.2)
