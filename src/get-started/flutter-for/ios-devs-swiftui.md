@@ -8,6 +8,10 @@ This document is for iOS developers who are comfortable developing their apps us
 
 Flutter is Google's modern UI framework; a declarative way of writing applications that run on multiple platforms, including iOS and Android. In this document, we will go through the similarities and differences between Flutter and SwiftUI and hopefully, by the end of it all, you will become more confident in your Flutter skills as a native iOS developer who uses SwiftUI.
 
+- [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
+  - [Rendering Text](#rendering-text)
+  - [Rendering Buttons](#rendering-buttons)
+
 ## Rendering Text
 
 In SwiftUI, we work with views and each view can have a series of subviews, that you declaratively specify in your Swift code. The example below will display a simple `"Hello, World!"` message to the center of the screen:
