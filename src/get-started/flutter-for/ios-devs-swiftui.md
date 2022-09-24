@@ -11,7 +11,11 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
   - [How do I display static text?](#how-do-i-display-static-text)
   - [How do I add buttons?](#how-do-i-add-buttons)
-  - [](#)
+  - [How do I align components horizontally?](#how-do-i-align-components-horizontally)
+  - [How do I align components vertically?](#how-do-i-align-components-vertically)
+  - [How do I display a list view?](#how-do-i-display-a-list-view)
+  - [How do I display a grid view?](#how-do-i-display-a-grid-view)
+  - [How do I create a page that scrolls?](#how-do-i-create-a-page-that-scrolls)
 
 ## How do I display static text?
 
@@ -93,4 +97,55 @@ class HomePage extends StatelessWidget {
 
 One big difference here beteween native iOS development with SwiftUI and Flutter is that in SwiftUI, if you want a button, then you need to use the `Button` class. But Flutter, being a multi-platform app development framework, you have access to variety of buttons that have pre-defined styles. The `TextButton` class comes from the *Material* package. A package is a set of source code files that are, well, packaged together. We will talk more about packages and Material soon but for now, if you're curious, you can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
 
-## 
+## How do I align components horizontally?
+
+In SwiftUI, stack views play a big part in designing your layouts. That's why there are two separate classes that allow you to create stacks:
+
+1. `HStack` for horizontal stack views
+2. `VStack` for vertical stack views
+
+This is a simple SwiftUI code that adds a globe image and a text to a horizontal stack view:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_swiftui/hstack_in_swiftui/ContentView.swift (SimpleHStack)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    HStack {
+      Image(systemName: "globe")
+      Text("Hello, world!")
+    }
+  }
+}
+```
+
+The equivalent of `HStack` in Flutter is `Row`. A row is a UI component who, as its name implies, lays out its *children* horizontally, in a row! Let's write the same code now in Flutter:
+
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Row(
+          children: const [
+            Icon(Icons.credit_card),
+            Text('Hello, world!'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+The initialization of `HStack` on SwiftUI starts with a curly brackets pair to create a closure as the view builder but we're still calling the initializer of HStack with predefined `alignment` and `spacing`, so the only thing left for us to do is to pass a pair of curly brackets as the view builder. In Flutter, the parameter that expects the children is called `children` and expects a `List<Widget>`. A `List` in Dart is the equivalent of `Array` in Swift.
+
+## How do I align components vertically?
+
+## How do I display a list view?
+
+## How do I display a grid view?
+
+## How do I create a page that scrolls?
