@@ -120,6 +120,7 @@ struct ContentView: View {
 
 The equivalent of `HStack` in Flutter is `Row`. A row is a UI component who, as its name implies, lays out its *children* horizontally, in a row! Let's write the same code now in Flutter:
 
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_flutter/lib/main.dart (SimpleRow)"?> -->
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -127,13 +128,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Row(
-          children: const [
-            Icon(Icons.credit_card),
-            Text('Hello, world!'),
-          ],
-        ),
+      body: Row(
+        children: const [
+          Icon(Icons.credit_card),
+          Text('Hello, world!'),
+        ],
       ),
     );
   }
@@ -143,6 +142,43 @@ class HomePage extends StatelessWidget {
 The initialization of `HStack` on SwiftUI starts with a curly brackets pair to create a closure as the view builder but we're still calling the initializer of HStack with predefined `alignment` and `spacing`, so the only thing left for us to do is to pass a pair of curly brackets as the view builder. In Flutter, the parameter that expects the children is called `children` and expects a `List<Widget>`. A `List` in Dart is the equivalent of `Array` in Swift.
 
 ## How do I align components vertically?
+
+`HStack` and `Row` are used in SwiftUI and Flutter respectively in order to arrange UI components horizontally. Similarly, you can use the `VStack` and, you guessed it, `Column`, in order to arrange your components vertically in SwiftUI and Flutter.
+
+Let's see how you would go about doing the same example as before, but this time arranging the components vertically:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/vstack_in_swiftui/vstack_in_swiftui/ContentView.swift (SimpleVStack)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    VStack {
+      Image(systemName: "globe")
+      Text("Hello, world!")
+    }
+  }
+}
+```
+
+The only thing that changed really between this example and the previous was that `HStack` became `VStack`. The same holds true in Flutter, all your Dart code stays the same, except for changing `Row` to `Column`, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_flutter/lib/main.dart (SimpleRow)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: const [
+          Icon(Icons.credit_card),
+          Text('Hello, world!'),
+        ],
+      ),
+    );
+  }
+}
+```
 
 ## How do I display a list view?
 
