@@ -161,7 +161,7 @@ struct ContentView: View {
 
 The only thing that changed really between this example and the previous was that `HStack` became `VStack`. The same holds true in Flutter, all your Dart code stays the same, except for changing `Row` to `Column`, as shown here:
 
-<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_flutter/lib/main.dart (SimpleRow)"?> -->
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_flutter/lib/main.dart (SimpleColumn)"?> -->
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
