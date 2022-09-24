@@ -9,10 +9,11 @@ This document is for iOS developers who are comfortable developing their apps us
 Flutter is Google's modern UI framework; a declarative way of writing applications that run on multiple platforms, including iOS and Android. In this document, we will go through the similarities and differences between Flutter and SwiftUI and hopefully, by the end of it all, you will become more confident in your Flutter skills as a native iOS developer who uses SwiftUI.
 
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
-  - [Rendering Text](#rendering-text)
-  - [Rendering Buttons](#rendering-buttons)
+  - [How do I display static text?](#how-do-i-display-static-text)
+  - [How do I add buttons?](#how-do-i-add-buttons)
+  - [](#)
 
-## Rendering Text
+## How do I display static text?
 
 In SwiftUI, we work with views and each view can have a series of subviews, that you declaratively specify in your Swift code. The example below will display a simple `"Hello, World!"` message to the center of the screen:
 
@@ -47,7 +48,7 @@ class HomePage extends StatelessWidget {
 
 One thing that you need to notice here is the use of the `Center` widget. In SwiftUI, a view's contents are by default rendered in its center but in Flutter this is not the case in all widgets. In this case, our `HomePage` widget's main UI component is `Scaffold` and this widget has chosen to not render its `body` widget at the center of the screen, so if you want to center your text, you have to wrap it with a `Center` widget. We will soon talk more about nested widgets.
 
-## Rendering Buttons
+## How do I add buttons?
 
 In SwiftUI, you would create a button using the `Button` class as shown here:
 
@@ -91,3 +92,5 @@ class HomePage extends StatelessWidget {
 ```
 
 One big difference here beteween native iOS development with SwiftUI and Flutter is that in SwiftUI, if you want a button, then you need to use the `Button` class. But Flutter, being a multi-platform app development framework, you have access to variety of buttons that have pre-defined styles. The `TextButton` class comes from the *Material* package. A package is a set of source code files that are, well, packaged together. We will talk more about packages and Material soon but for now, if you're curious, you can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
+
+## 
