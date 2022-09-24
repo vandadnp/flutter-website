@@ -161,7 +161,7 @@ struct ContentView: View {
 
 The only thing that changed really between this example and the previous was that `HStack` became `VStack`. The same holds true in Flutter, all your Dart code stays the same, except for changing `Row` to `Column`, as shown here:
 
-<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_flutter/lib/main.dart (SimpleColumn)"?> -->
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/vstack_in_flutter/lib/main.dart (SimpleColumn)"?> -->
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -181,6 +181,109 @@ class HomePage extends StatelessWidget {
 ```
 
 ## How do I display a list view?
+
+In SwiftUI, the base component for displaying lists is `List`. Let's have a look at an example where we display 3 simple `Text` components as list-items inside our `List`:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ContentView.swift (SimpleList)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    List {
+      Text("Person 1")
+      Text("Person 2")
+      Text("Person 3")
+    }
+  }
+}
+```
+
+The initializer of the `List` class in SwiftUI, like many other views that can have sub-views, has a view builder marked as `@ViewBuilder` which allows you to return a series of sub-views to be displayed as the content of that view, in this case, as contents of our list. This is more a convenience than it is the right way of creating lists in SwiftUI as the views that you insert for the contents of a `List` in SwiftUI cannot be more than 10 at a time. If you want to display more than 10 items at a time in a `List` in SwiftUI, you will most probably want to use the `ForEach` syntax or if your items are pure `String` instances, which ours are, you can get away by simply passing the strings to your `List` as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ListWithStrings.swift (ListWithStrings)"?> -->
+```swift
+struct ListWithStrings: View {
+  let names = [
+    "Person 1",
+    "Person 2",
+    "Person 3",
+  ]
+  var body: some View {
+    List(names, id: \.self) { name in
+      Text(name)
+    }
+  }
+}
+```
+
+More often than not though, you will have a list of model objects you want to display to the user. In those cases, you will need to ensure that your model objects are identifiable using the `Identifiable` protocol as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ListWithPersons.swift (ListWithPersons)"?> -->
+```swift
+struct Person: Identifiable {
+  var name: String
+  let id = UUID()
+}
+
+struct ListWithPersons: View {
+  let persons: [Person]
+  var body: some View {
+    List {
+      ForEach(persons) { person in
+        Text(person.name)
+      }
+    }
+  }
+}
+
+var persons = [
+  Person(name: "Person 1"),
+  Person(name: "Person 2"),
+  Person(name: "Person 3"),
+]
+
+struct ListWithPersons_Previews: PreviewProvider {
+  static var previews: some View {
+    ListWithPersons(persons: persons)
+  }
+}
+```
+
+The way this example works is very similar to how Flutter prefers to build its list views although Flutter doesn't need the list items to be identifiable, unlike SwiftUI. All you have to do is to tell Flutter how many items you want to display and then build a `Widget` per item. Let's see how this looks like in Flutter using the `ListView` widget:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_flutter/lib/main.dart (SimpleList)"?> -->
+```dart
+const items = [
+  'Person 1',
+  'Person 2',
+  'Person 3',
+];
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(items[index]),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+Here are a few things to note about this example in Flutter:
+
+* The `ListView` widget has a builder method, much like SwiftUI's `List` class has a view builder that is a closure.
+* The `itemCount` parameter of the `ListView` in Flutter dictates how many items need to be displayed and rendered by the `ListView`.
+* The `itemBuilder` then gets called with an index from and including 0 up to and excluding the item count, and must return a `Widget` instance per item.
+
+In this example we are returning a `ListTile` per item but you could directly return a `Text` per item as well. The `ListTile` widget has some intrinsic properties such as a specific height and font size that might be quite helpful in building a good-looking list view but you're more than welcome to return almost any other widget that represents your data, per index.
 
 ## How do I display a grid view?
 
