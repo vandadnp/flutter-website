@@ -15,7 +15,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
   - [How do I align components vertically?](#how-do-i-align-components-vertically)
   - [How do I display a list view?](#how-do-i-display-a-list-view)
   - [How do I display a grid?](#how-do-i-display-a-grid)
-  - [How do I create a page that scrolls?](#how-do-i-create-a-page-that-scrolls)
+  - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
 
 ## How do I display static text?
 
@@ -347,4 +347,76 @@ One important distinction between how SwiftUI's `Grid` and Flutter's `GridView` 
 
 The term *axis* is something that you'll come across more and more on your journey to learn Flutter so let's talk about it quickly: in a widget those main task is to lay out its components vertically, the main axis is `Axis.vertical` and the cross axis is `Axis.horizontal` so in case of our `GridView`, the main axis is vertical because that's what grids do, they lay out their rows vertically and the cross axis would be horizontal.
 
-## How do I create a page that scrolls?
+## How do I create a scroll view?
+
+In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` class. Let's say that you want to display a series of `User` class instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/scrollview_in_swiftui/scrollview_in_swiftui/ContentView.swift (ScrollViewExample)"?> -->
+```swift
+struct Person: Identifiable {
+  let id = UUID()
+  var name: String
+  var age: Int
+}
+
+// render all persons on the screen
+struct ExampleScrollView: View {
+  let persons: [Person]
+  var body: some View {
+    ScrollView {
+      VStack(alignment: .leading) {
+        ForEach(persons) { person in
+          PersonView(person: person)
+      }
+    }
+  }
+}
+
+// each Person is rendered using this view
+struct PersonView: View {
+  let person: Person
+  var body: some View {
+    VStack(alignment: .leading) {
+      HStack {
+        Text("Name:")
+        Text(person.name)
+      }
+      HStack {
+        Text("Age:")
+        Text("\(person.age)")
+      }
+      Divider()
+    }
+  }
+  }
+}
+
+// create 100 mocked Person objects
+extension Person {
+  static func mockPersons() -> [Person] {
+    (1..<100).map { (count: Int) -> Person in
+      Person(
+        name: "Person #\(count + 1)",
+        age: 10 + count
+      )
+    }
+  }
+}
+
+// prepare for the preview
+struct GridView_Previews: PreviewProvider {
+  static var previews: some View {
+    ExampleScrollView(
+      persons: Person.mockPersons()
+    )
+      .preferredColorScheme(.dark)
+  }
+}
+```
+
+In this example we have done things more like you would do it in a production-level application in that:
+
+1. we have a `Person` class that represents the data each person would carry, such as name and age.
+2. The `Person` class conforms to the `Identifiable` protocol so that it can be used inside the `ForEach` view with ease.
+3. Each person is then rendered using a dedicated `PersonView` view class for the sake of reusability.
+
