@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct scrollview_in_swiftuiApp: App {
-    var body: some Scene {
-        WindowGroup {
-          ExampleScrollView(persons: Person.mockPersons())
-        }
+  var body: some Scene {
+    WindowGroup {
+      ExampleScrollView(persons: Person.mockPersons())
     }
+  }
 }

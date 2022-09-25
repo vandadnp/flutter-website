@@ -16,27 +16,27 @@ struct ExampleScrollView: View {
       VStack(alignment: .leading) {
         ForEach(persons) { person in
           PersonView(person: person)
+        }
       }
     }
   }
-}
-
-// each Person is rendered using this view
-struct PersonView: View {
-  let person: Person
-  var body: some View {
-    VStack(alignment: .leading) {
-      HStack {
-        Text("Name:")
-        Text(person.name)
+  
+  // each Person is rendered using this view
+  struct PersonView: View {
+    let person: Person
+    var body: some View {
+      VStack(alignment: .leading) {
+        HStack {
+          Text("Name:")
+          Text(person.name)
+        }
+        HStack {
+          Text("Age:")
+          Text("\(person.age)")
+        }
+        Divider()
       }
-      HStack {
-        Text("Age:")
-        Text("\(person.age)")
-      }
-      Divider()
     }
-  }
   }
 }
 
@@ -58,7 +58,7 @@ struct GridView_Previews: PreviewProvider {
     ExampleScrollView(
       persons: Person.mockPersons()
     )
-      .preferredColorScheme(.dark)
+    .preferredColorScheme(.dark)
   }
 }
 // #enddocregion ScrollViewExample

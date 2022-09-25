@@ -353,6 +353,7 @@ In SwiftUI, if you want to create custom scrolling components, you would use the
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/scrollview_in_swiftui/scrollview_in_swiftui/ContentView.swift (ScrollViewExample)"?> -->
 ```swift
+// represent each person as a Person instance
 struct Person: Identifiable {
   let id = UUID()
   var name: String
@@ -367,27 +368,27 @@ struct ExampleScrollView: View {
       VStack(alignment: .leading) {
         ForEach(persons) { person in
           PersonView(person: person)
+        }
       }
     }
   }
-}
-
-// each Person is rendered using this view
-struct PersonView: View {
-  let person: Person
-  var body: some View {
-    VStack(alignment: .leading) {
-      HStack {
-        Text("Name:")
-        Text(person.name)
+  
+  // each Person is rendered using this view
+  struct PersonView: View {
+    let person: Person
+    var body: some View {
+      VStack(alignment: .leading) {
+        HStack {
+          Text("Name:")
+          Text(person.name)
+        }
+        HStack {
+          Text("Age:")
+          Text("\(person.age)")
+        }
+        Divider()
       }
-      HStack {
-        Text("Age:")
-        Text("\(person.age)")
-      }
-      Divider()
     }
-  }
   }
 }
 
@@ -409,7 +410,7 @@ struct GridView_Previews: PreviewProvider {
     ExampleScrollView(
       persons: Person.mockPersons()
     )
-      .preferredColorScheme(.dark)
+    .preferredColorScheme(.dark)
   }
 }
 ```
@@ -499,3 +500,12 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
+
+You can see a lot of similarities between the SwiftUI and the Flutter code for sure. Let's list them here:
+
+* Each person is an instance of the `Person` struct in SwiftUI and the `Person` class in Flutter.
+* The `PersonView` uses `Column` and `Row` in Flutter and `VStack` and `HStack` respectively in SwiftUI. We've talked about these before!
+* SwiftUI uses `ScrollView` while Flutter uses `SingleChildScrollView` to render a child that is layed out in a scrollable fashion on the screen.
+
+The major difference between `ScrollView` and `SingleChildScrollView` is that `ScrollView`'s initializer in SwiftUI has a `content` parameter which is a `@ViewBuidler` and can take up to 10 views directly to lay out though in our example the only view we are laying out is `ForEach` which in turn expands to displaying all instances of our `Person` struct. However, in Flutter, `SingleChildScrollView` has a single `child` parameter that takes just one `Widget` instance, in this case, our `Column` that roughly translates to the `ForEach` view in SwiftUI.
+
