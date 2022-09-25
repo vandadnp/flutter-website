@@ -14,7 +14,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
   - [How do I align components horizontally?](#how-do-i-align-components-horizontally)
   - [How do I align components vertically?](#how-do-i-align-components-vertically)
   - [How do I display a list view?](#how-do-i-display-a-list-view)
-  - [How do I display a grid view?](#how-do-i-display-a-grid-view)
+  - [How do I display a grid?](#how-do-i-display-a-grid)
   - [How do I create a page that scrolls?](#how-do-i-create-a-page-that-scrolls)
 
 ## How do I display static text?
@@ -285,6 +285,66 @@ Here are a few things to note about this example in Flutter:
 
 In this example we are returning a `ListTile` per item but you could directly return a `Text` per item as well. The `ListTile` widget has some intrinsic properties such as a specific height and font size that might be quite helpful in building a good-looking list view but you're more than welcome to return almost any other widget that represents your data, per index.
 
-## How do I display a grid view?
+## How do I display a grid?
+
+In SwiftUI, when constructing non-conditional grids, you would use `Grid` and `GridRow`. Each `GridRow` represents a list of views to be displayed in that row and the `Grid` renders all the rows together. Here is an example of how this can be done in SwiftUI:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/grid_in_swiftui/grid_in_swiftui/ContentView.swift (GridExample)"?> -->
+```swift
+struct GridView: View {
+  var body: some View {
+    Grid {
+      GridRow {
+        Text("Row 1")
+        Image(systemName: "square.and.arrow.down")
+        Image(systemName: "square.and.arrow.up")
+      }
+      GridRow {
+        Text("Row 2")
+        Image(systemName: "square.and.arrow.down")
+        Image(systemName: "square.and.arrow.up")
+      }
+    }
+  }
+}
+```
+
+In order to display grids in Flutter, you would use the `GridView` widget. This widget has various constructors each of which achieves more or less the same goal but with different input parameters. In this example, to comply with the SwiftUI code as much as possible, we will use the `.builder()` initializer of our `GridView` widget in Flutter like so:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/grid_in_flutter/lib/main.dart (GridExample)"?> -->
+```dart
+const widgets = [
+  Text('Row 1'),
+  Icon(Icons.download),
+  Icon(Icons.upload),
+  Text('Row 2'),
+  Icon(Icons.download),
+  Icon(Icons.upload),
+];
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisExtent: 40.0,
+        ),
+        itemCount: widgets.length,
+        itemBuilder: (context, index) => widgets[index],
+      ),
+    );
+  }
+}
+```
+
+The delegate of type `SliverGridDelegateWithFixedCrossAxisCount` determines various parameters using which the grid view will lay out its components such as `crossAxisCount` which is the number of items to display per row horizontally, and `mainAxisExtent` that dictates the number of pixels each row has to have.
+
+One important distinction between how SwiftUI's `Grid` and Flutter's `GridView` work is that in SwiftUI, you create your top-level `Grid` component and feed it with instances of `GridRow` but in Flutter, you create your `GridView` and then using the delegate you decide how the grid should lay out its components.
+
+The term *axis* is something that you'll come across more and more on your journey to learn Flutter so let's talk about it quickly: in a widget those main task is to lay out its components vertically, the main axis is `Axis.vertical` and the cross axis is `Axis.horizontal` so in case of our `GridView`, the main axis is vertical because that's what grids do, they lay out their rows vertically and the cross axis would be horizontal.
 
 ## How do I create a page that scrolls?
