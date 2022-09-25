@@ -43,7 +43,7 @@ struct PersonView: View {
 // create 100 mocked Person objects
 extension Person {
   static func mockPersons() -> [Person] {
-    (1..<100).map { (count: Int) -> Person in
+    (0..<100).map { (count: Int) -> Person in
       Person(
         name: "Person #\(count + 1)",
         age: 10 + count

@@ -394,7 +394,7 @@ struct PersonView: View {
 // create 100 mocked Person objects
 extension Person {
   static func mockPersons() -> [Person] {
-    (1..<100).map { (count: Int) -> Person in
+    (0..<100).map { (count: Int) -> Person in
       Person(
         name: "Person #\(count + 1)",
         age: 10 + count
@@ -420,3 +420,82 @@ In this example we have done things more like you would do it in a production-le
 2. The `Person` class conforms to the `Identifiable` protocol so that it can be used inside the `ForEach` view with ease.
 3. Each person is then rendered using a dedicated `PersonView` view class for the sake of reusability.
 
+The closest equivalent of `ScrollView` in Flutter is `SingleChildScrollView`. We can use it to implement the same code as we just did in SwiftUI, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/scrollview_in_flutter/lib/main.dart (ScrollExample)"?> -->
+```dart
+// create a class that holds each person's data
+@immutable
+class Person {
+  final String name;
+  final int age;
+  const Person({
+    required this.name,
+    required this.age,
+  });
+}
+
+// like in SwiftUI, we create a widget (view in SwiftUI),
+// that represents each person visually on the screen
+class PersonView extends StatelessWidget {
+  final Person person;
+  const PersonView({
+    super.key,
+    required this.person,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Text('Name:'),
+            Text(person.name),
+          ],
+        ),
+        Row(
+          children: [
+            const Text('Age:'),
+            Text(person.age.toString()),
+          ],
+        ),
+        const Divider(),
+      ],
+    );
+  }
+}
+
+// then we create a list of people
+final mockPersons = Iterable.generate(
+  100,
+  (index) => Person(
+    name: 'Person #${index + 1}',
+    age: 10 + index,
+  ),
+);
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // and last but not least, we display the list
+      // of people on the screen inside a scroll viwe of type
+      // SingleChildScrollView (equivalent of ScrollView in SwiftUI)
+      body: SingleChildScrollView(
+        child: Column(
+          children: mockPersons
+              .map(
+                (person) => PersonView(
+                  person: person,
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+  }
+}
+```
