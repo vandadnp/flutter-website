@@ -18,7 +18,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I display a grid?](#how-do-i-display-a-grid)
     - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
   - [Navigation](#navigation)
-    - [Navigating between pages](#navigating-between-pages)
+    - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
 
 ## UI Basics
 
@@ -520,7 +520,7 @@ The major difference between `ScrollView` and `SingleChildScrollView` is that `S
 
 In this section of the document we will discuss navigation between pages of an app, the push and pop mechanism and more.
 
-### Navigating between pages
+### How do I navigate between pages?
 
 iOS and macOS apps are usually built out of different "pages" or navigation routes. This stack of pages is called navigation stack in SwiftUI and is represented by the `NavigationStack` struct that itself contains a list of navigation links represented by the `NavigationLink` struct. Going back to our `Person` struct, let's create an application that displays a list of persons and tapping on each person display's the person's details in a new navigation link. The `Person` and `PersonView` structs will stay *almost* the same as they were in the previous examples; the only thing we will change is to make sure the `Person` struct conforms to the `Hashable` protocol because the `navigationDestination()` function of `View` in SwiftUI requires that. We will then use `NavigationStack` and `NavigationLink` as shown here to create a list and then a details page for each person:
 
@@ -556,5 +556,45 @@ struct ContentView: View {
 }
 ```
 
-Navigation in Flutter is more decoupled from the declarative way of defining your user interface in that you need to define your navigation *routes* using a name of your choosing and after this definition, you can call upon your navigation routes using their names. Here is an example of achieving the same effect as our SwiftUI code, but using Flutter:
+Navigation in Flutter is more decoupled from the declarative way of defining your user interface in that you need to define your navigation *routes* using a name of your choosing and after this definition, you can call upon your navigation routes using their names. The first part of this puzzle is to define the navigation routes and we do that when creating an instance of our application (the class instance that we pass to the `runApp()` function), as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_flutter/lib/main.dart (CupertinoAppExample)"?> -->
+```dart
+void main() {
+  runApp(
+    // we create an instance of our app
+    // and pass it to the runApp function
+    const App(),
+  );
+}
+
+// define the name of the route as a constant so that
+// you can not only use it to create the list of your app-routes,
+// but also use it in the Navigator to push the route using
+// its name
+const detailsPageRouteName = '/details';
+
+class App extends StatelessWidget {
+  const App({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // the widget we return from here is a CupertinoApp
+    // that has the look and feel of an iOS app by default
+    return CupertinoApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(),
+      // then you define your routes using a Map where the keys
+      // to the map are the route names and the values are the
+      // a function each of which receives a BuildContext and returns
+      // a Widget
+      routes: {
+        detailsPageRouteName: (context) => const DetailsPage(),
+      },
+    );
+  }
+}
+```
 
