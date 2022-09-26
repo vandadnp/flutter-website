@@ -1,26 +1,35 @@
 import SwiftUI
 
-// #docregion ScrollViewExample
+// #docregion NavigationExample
 // represent each person as a Person instance
-struct Person: Identifiable {
+struct Person: Identifiable, Hashable {
   let id = UUID()
   var name: String
   var age: Int
 }
 
-// render all persons on the screen
-struct ExampleScrollView: View {
+// render all persons on the screen and allow
+// the user to tap on each user to see their details
+struct ContentView: View {
   let persons: [Person]
+  @State private var path: [Person] = []
   var body: some View {
-    ScrollView {
-      VStack(alignment: .leading) {
+    NavigationStack(path: $path) {
+      List {
         ForEach(persons) { person in
-          PersonView(person: person)
+          NavigationLink(
+            person.name,
+            value: person
+          )
         }
+      }
+      .navigationDestination(for: Person.self) { person in
+        PersonView(person: person)
       }
     }
   }
 }
+// #enddocregion NavigationExample
 
 // each Person is rendered using this view
 struct PersonView: View {
@@ -53,12 +62,11 @@ extension Person {
 }
 
 // prepare for the preview
-struct GridView_Previews: PreviewProvider {
+struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-    ExampleScrollView(
+    ContentView(
       persons: Person.mockPersons()
     )
     .preferredColorScheme(.dark)
   }
 }
-// #enddocregion ScrollViewExample

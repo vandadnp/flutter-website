@@ -18,6 +18,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I display a grid?](#how-do-i-display-a-grid)
     - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
   - [Navigation](#navigation)
+    - [Navigating between pages](#navigating-between-pages)
 
 ## UI Basics
 
@@ -60,7 +61,7 @@ One thing that you need to notice here is the use of the `Center` widget. In Swi
 
 ### How do I add buttons?
 
-In SwiftUI, you would create a button using the `Button` class as shown here:
+In SwiftUI, you would create a button using the `Button` struct as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/rendering_button_swiftui/rendering_button_swiftui/ContentView.swift (SimpleButton)"?> -->
 ```swift
@@ -74,7 +75,7 @@ struct ContentView: View {
 }
 ```
 
-The `Button` class in SwiftUI is constructed using an initializer, and various parameters that the initializer might require. In this case, we are using the initializer that takes in a `titleKey` parameter of type `LocalizedStringKey` and an action of type `@escaping () -> Void`.
+The `Button` struct in SwiftUI is constructed using an initializer, and various parameters that the initializer might require. In this case, we are using the initializer that takes in a `titleKey` parameter of type `LocalizedStringKey` and an action of type `@escaping () -> Void`.
 
 In Flutter, to achieve the same results, you *can* use the `TextButton` class as shown here:
 
@@ -101,11 +102,11 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-One big difference here beteween native iOS development with SwiftUI and Flutter is that in SwiftUI, if you want a button, then you need to use the `Button` class. But Flutter, being a multi-platform app development framework, you have access to variety of buttons that have pre-defined styles. The `TextButton` class comes from the *Material* package. A package is a set of source code files that are, well, packaged together. We will talk more about packages and Material soon but for now, if you're curious, you can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
+One big difference here beteween native iOS development with SwiftUI and Flutter is that in SwiftUI, if you want a button, then you need to use the `Button` struct. But Flutter, being a multi-platform app development framework, you have access to variety of buttons that have pre-defined styles. The `TextButton` class comes from the *Material* package. A package is a set of source code files that are, well, packaged together. We will talk more about packages and Material soon but for now, if you're curious, you can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
 
 ### How do I align components horizontally?
 
-In SwiftUI, stack views play a big part in designing your layouts. That's why there are two separate classes that allow you to create stacks:
+In SwiftUI, stack views play a big part in designing your layouts. That's why there are two separate structures that allow you to create stacks:
 
 1. `HStack` for horizontal stack views
 2. `VStack` for vertical stack views
@@ -203,7 +204,7 @@ struct ContentView: View {
 }
 ```
 
-The initializer of the `List` class in SwiftUI, like many other views that can have sub-views, has a view builder marked as `@ViewBuilder` which allows you to return a series of sub-views to be displayed as the content of that view, in this case, as contents of our list. This is more a convenience than it is the right way of creating lists in SwiftUI as the views that you insert for the contents of a `List` in SwiftUI cannot be more than 10 at a time. If you want to display more than 10 items at a time in a `List` in SwiftUI, you will most probably want to use the `ForEach` syntax or if your items are pure `String` instances, which ours are, you can get away by simply passing the strings to your `List` as shown here:
+The initializer of the `List` struct in SwiftUI, like many other views that can have sub-views, has a view builder marked as `@ViewBuilder` which allows you to return a series of sub-views to be displayed as the content of that view, in this case, as contents of our list. This is more a convenience than it is the right way of creating lists in SwiftUI as the views that you insert for the contents of a `List` in SwiftUI cannot be more than 10 at a time. If you want to display more than 10 items at a time in a `List` in SwiftUI, you will most probably want to use the `ForEach` syntax or if your items are pure `String` instances, which ours are, you can get away by simply passing the strings to your `List` as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ListWithStrings.swift (ListWithStrings)"?> -->
 ```swift
@@ -285,7 +286,7 @@ class HomePage extends StatelessWidget {
 
 Here are a few things to note about this example in Flutter:
 
-* The `ListView` widget has a builder method, much like SwiftUI's `List` class has a view builder that is a closure.
+* The `ListView` widget has a builder method, much like SwiftUI's `List` struct has a view builder that is a closure.
 * The `itemCount` parameter of the `ListView` in Flutter dictates how many items need to be displayed and rendered by the `ListView`.
 * The `itemBuilder` then gets called with an index from and including 0 up to and excluding the item count, and must return a `Widget` instance per item.
 
@@ -355,7 +356,7 @@ The term *axis* is something that you'll come across more and more on your journ
 
 ### How do I create a scroll view?
 
-In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` class. Let's say that you want to display a series of `User` class instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
+In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` struct. Let's say that you want to display a series of `User` struct instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/scrollview_in_swiftui/scrollview_in_swiftui/ContentView.swift (ScrollViewExample)"?> -->
 ```swift
@@ -378,22 +379,22 @@ struct ExampleScrollView: View {
       }
     }
   }
-  
-  // each Person is rendered using this view
-  struct PersonView: View {
-    let person: Person
-    var body: some View {
-      VStack(alignment: .leading) {
-        HStack {
-          Text("Name:")
-          Text(person.name)
-        }
-        HStack {
-          Text("Age:")
-          Text("\(person.age)")
-        }
-        Divider()
+}
+
+// each Person is rendered using this view
+struct PersonView: View {
+  let person: Person
+  var body: some View {
+    VStack(alignment: .leading) {
+      HStack {
+        Text("Name:")
+        Text(person.name)
       }
+      HStack {
+        Text("Age:")
+        Text("\(person.age)")
+      }
+      Divider()
     }
   }
 }
@@ -423,9 +424,9 @@ struct GridView_Previews: PreviewProvider {
 
 In this example we have done things more like you would do it in a production-level application in that:
 
-1. we have a `Person` class that represents the data each person would carry, such as name and age.
-2. The `Person` class conforms to the `Identifiable` protocol so that it can be used inside the `ForEach` view with ease.
-3. Each person is then rendered using a dedicated `PersonView` view class for the sake of reusability.
+1. we have a `Person` struct that represents the data each person would carry, such as name and age.
+2. The `Person` struct conforms to the `Identifiable` protocol so that it can be used inside the `ForEach` view with ease.
+3. Each person is then rendered using a dedicated `PersonView` view struct for the sake of reusability.
 
 The closest equivalent of `ScrollView` in Flutter is `SingleChildScrollView`. We can use it to implement the same code as we just did in SwiftUI, as shown here:
 
@@ -519,4 +520,41 @@ The major difference between `ScrollView` and `SingleChildScrollView` is that `S
 
 In this section of the document we will discuss navigation between pages of an app, the push and pop mechanism and more.
 
+### Navigating between pages
+
+iOS and macOS apps are usually built out of different "pages" or navigation routes. This stack of pages is called navigation stack in SwiftUI and is represented by the `NavigationStack` struct that itself contains a list of navigation links represented by the `NavigationLink` struct. Going back to our `Person` struct, let's create an application that displays a list of persons and tapping on each person display's the person's details in a new navigation link. The `Person` and `PersonView` structs will stay *almost* the same as they were in the previous examples; the only thing we will change is to make sure the `Person` struct conforms to the `Hashable` protocol because the `navigationDestination()` function of `View` in SwiftUI requires that. We will then use `NavigationStack` and `NavigationLink` as shown here to create a list and then a details page for each person:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_swiftui/navigation_in_swiftui/ContentView.swift (NavigationExample)"?> -->
+```swift
+// represent each person as a Person instance
+struct Person: Identifiable, Hashable {
+  let id = UUID()
+  var name: String
+  var age: Int
+}
+
+// render all persons on the screen and allow
+// the user to tap on each user to see their details
+struct ContentView: View {
+  let persons: [Person]
+  @State private var path: [Person] = []
+  var body: some View {
+    NavigationStack(path: $path) {
+      List {
+        ForEach(persons) { person in
+          NavigationLink(
+            person.name,
+            value: person
+          )
+        }
+      }
+      .navigationDestination(for: Person.self) { person in
+        PersonView(person: person)
+      }
+    }
+  }
+}
+```
+
+Navigation in Flutter is more decoupled from the declarative way of defining your user interface in that you need to define your navigation *routes* using a name of your choosing and after this definition, you can call upon your navigation routes using their names. Here is an example of achieving the same effect as our SwiftUI code, but using Flutter:
 
