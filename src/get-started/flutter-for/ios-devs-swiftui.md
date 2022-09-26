@@ -9,15 +9,21 @@ This document is for iOS developers who are comfortable developing their apps us
 Flutter is Google's modern UI framework; a declarative way of writing applications that run on multiple platforms, including iOS and Android. In this document, we will go through the similarities and differences between Flutter and SwiftUI and hopefully, by the end of it all, you will become more confident in your Flutter skills as a native iOS developer who uses SwiftUI.
 
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
-  - [How do I display static text?](#how-do-i-display-static-text)
-  - [How do I add buttons?](#how-do-i-add-buttons)
-  - [How do I align components horizontally?](#how-do-i-align-components-horizontally)
-  - [How do I align components vertically?](#how-do-i-align-components-vertically)
-  - [How do I display a list view?](#how-do-i-display-a-list-view)
-  - [How do I display a grid?](#how-do-i-display-a-grid)
-  - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
+  - [UI Basics](#ui-basics)
+    - [How do I display static text?](#how-do-i-display-static-text)
+    - [How do I add buttons?](#how-do-i-add-buttons)
+    - [How do I align components horizontally?](#how-do-i-align-components-horizontally)
+    - [How do I align components vertically?](#how-do-i-align-components-vertically)
+    - [How do I display a list view?](#how-do-i-display-a-list-view)
+    - [How do I display a grid?](#how-do-i-display-a-grid)
+    - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
+  - [Navigation](#navigation)
 
-## How do I display static text?
+## UI Basics
+
+In this section of the document we will discuss basic UI components and compare SwiftUI with Flutter. We will learn how to display static text, create buttons and react to their on-press events, display lists and grids and much more.
+
+### How do I display static text?
 
 In SwiftUI, we work with views and each view can have a series of subviews, that you declaratively specify in your Swift code. The example below will display a simple `"Hello, World!"` message to the center of the screen:
 
@@ -52,7 +58,7 @@ class HomePage extends StatelessWidget {
 
 One thing that you need to notice here is the use of the `Center` widget. In SwiftUI, a view's contents are by default rendered in its center but in Flutter this is not the case in all widgets. In this case, our `HomePage` widget's main UI component is `Scaffold` and this widget has chosen to not render its `body` widget at the center of the screen, so if you want to center your text, you have to wrap it with a `Center` widget. We will soon talk more about nested widgets.
 
-## How do I add buttons?
+### How do I add buttons?
 
 In SwiftUI, you would create a button using the `Button` class as shown here:
 
@@ -97,7 +103,7 @@ class HomePage extends StatelessWidget {
 
 One big difference here beteween native iOS development with SwiftUI and Flutter is that in SwiftUI, if you want a button, then you need to use the `Button` class. But Flutter, being a multi-platform app development framework, you have access to variety of buttons that have pre-defined styles. The `TextButton` class comes from the *Material* package. A package is a set of source code files that are, well, packaged together. We will talk more about packages and Material soon but for now, if you're curious, you can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
 
-## How do I align components horizontally?
+### How do I align components horizontally?
 
 In SwiftUI, stack views play a big part in designing your layouts. That's why there are two separate classes that allow you to create stacks:
 
@@ -141,7 +147,7 @@ class HomePage extends StatelessWidget {
 
 The initialization of `HStack` on SwiftUI starts with a curly brackets pair to create a closure as the view builder but we're still calling the initializer of HStack with predefined `alignment` and `spacing`, so the only thing left for us to do is to pass a pair of curly brackets as the view builder. In Flutter, the parameter that expects the children is called `children` and expects a `List<Widget>`. A `List` in Dart is the equivalent of `Array` in Swift.
 
-## How do I align components vertically?
+### How do I align components vertically?
 
 `HStack` and `Row` are used in SwiftUI and Flutter respectively in order to arrange UI components horizontally. Similarly, you can use the `VStack` and, you guessed it, `Column`, in order to arrange your components vertically in SwiftUI and Flutter.
 
@@ -180,7 +186,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-## How do I display a list view?
+### How do I display a list view?
 
 In SwiftUI, the base component for displaying lists is `List`. Let's have a look at an example where we display 3 simple `Text` components as list-items inside our `List`:
 
@@ -285,7 +291,7 @@ Here are a few things to note about this example in Flutter:
 
 In this example we are returning a `ListTile` per item but you could directly return a `Text` per item as well. The `ListTile` widget has some intrinsic properties such as a specific height and font size that might be quite helpful in building a good-looking list view but you're more than welcome to return almost any other widget that represents your data, per index.
 
-## How do I display a grid?
+### How do I display a grid?
 
 In SwiftUI, when constructing non-conditional grids, you would use `Grid` and `GridRow`. Each `GridRow` represents a list of views to be displayed in that row and the `Grid` renders all the rows together. Here is an example of how this can be done in SwiftUI:
 
@@ -347,7 +353,7 @@ One important distinction between how SwiftUI's `Grid` and Flutter's `GridView` 
 
 The term *axis* is something that you'll come across more and more on your journey to learn Flutter so let's talk about it quickly: in a widget those main task is to lay out its components vertically, the main axis is `Axis.vertical` and the cross axis is `Axis.horizontal` so in case of our `GridView`, the main axis is vertical because that's what grids do, they lay out their rows vertically and the cross axis would be horizontal.
 
-## How do I create a scroll view?
+### How do I create a scroll view?
 
 In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` class. Let's say that you want to display a series of `User` class instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
 
@@ -508,4 +514,9 @@ You can see a lot of similarities between the SwiftUI and the Flutter code for s
 * SwiftUI uses `ScrollView` while Flutter uses `SingleChildScrollView` to render a child that is layed out in a scrollable fashion on the screen.
 
 The major difference between `ScrollView` and `SingleChildScrollView` is that `ScrollView`'s initializer in SwiftUI has a `content` parameter which is a `@ViewBuidler` and can take up to 10 views directly to lay out though in our example the only view we are laying out is `ForEach` which in turn expands to displaying all instances of our `Person` struct. However, in Flutter, `SingleChildScrollView` has a single `child` parameter that takes just one `Widget` instance, in this case, our `Column` that roughly translates to the `ForEach` view in SwiftUI.
+
+## Navigation
+
+In this section of the document we will discuss navigation between pages of an app, the push and pop mechanism and more.
+
 
