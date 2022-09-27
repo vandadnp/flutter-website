@@ -598,3 +598,92 @@ class App extends StatelessWidget {
 }
 ```
 
+After defining our single route as a parameter of the `CupertinoApp` class, we can go ahead and display the list of persons that we had mocked using the `mockPersons()` function. Once the user taps on any of the persons in the list, we will use the `pushNamed()` function of `Navigator` in order to push the details page for that person using the `detailsPageRouteName` constant route name we defined earlier:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_flutter/lib/main.dart (HomePageWithListOfPeople)"?> -->
+```dart
+// This is stateless widget that displays the list of persons
+// that we get from the mockPersons list and allows the user
+// to tap each person to see their details
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text(
+          'Pick a person',
+        ),
+      ),
+      child: Material(
+        child: ListView.builder(
+          itemCount: mockPersons.length,
+          itemBuilder: (context, index) {
+            final person = mockPersons.elementAt(index);
+            final age = '${person.age} years old';
+            return ListTile(
+              title: Text(person.name),
+              subtitle: Text(age),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+              ),
+              onTap: () {
+                // when a ListTile that represents a person is
+                // tapped, we push the detailsPageRouteName route
+                // to the Navigator and pass the person's instance
+                // to the route
+                Navigator.of(context).pushNamed(
+                  detailsPageRouteName,
+                  arguments: person,
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+As you can see, the `pushNamed()` function takes in two parameters:
+
+* `String routeName`: this is the name of the route that we should have already defined at our app-level.
+* `Object? arguments` an optional object to pass to the route as a parameter.
+
+After handling the tapping event, we can go ahead and program our `DetailsPage` widget who is responsible for displaying the details of each person that should be passed to it as a parameter. In SwiftUI, since the navigation is tightly connected to the structure of the UI using `NavigationStack` and `NavigationLink`, you pass `Hashable` parameters that have to be sent to the details page into the `NavigationLink` and when the `navigationDestination()` function is called, you receive that `Hashable` object and can then directly instantiate your details page. In Flutter since the routes are defined at an app-level, where you have no idea of which object is selected or what object to pass to where, you need to dynamically pass these objects of type `Object?` to the route and at the receiving side, read them using `ModalRoute` as you can see here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_flutter/lib/main.dart (DetailsPageExample)"?> -->
+```dart
+class DetailsPage extends StatelessWidget {
+  const DetailsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // read the person instance from the arguments
+    final Person person = ModalRoute.of(
+      context,
+    )?.settings.arguments as Person;
+    // extract the age
+    final age = '${person.age} years old';
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(
+          person.name,
+        ),
+      ),
+      child: SafeArea(
+        child: Material(
+          // use a ListTile to display the person's
+          // details since it already has a good layout
+          child: ListTile(
+            title: Text(person.name),
+            subtitle: Text(age),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```

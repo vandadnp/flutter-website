@@ -38,6 +38,7 @@ class App extends StatelessWidget {
     );
   }
 }
+// #enddocregion CupertinoAppExample
 
 // create a class that holds each person's data
 @immutable
@@ -59,6 +60,10 @@ final mockPersons = Iterable.generate(
   ),
 );
 
+// #docregion HomePageWithListOfPeople
+// This is stateless widget that displays the list of persons
+// that we get from the mockPersons list and allows the user
+// to tap each person to see their details
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -83,6 +88,10 @@ class HomePage extends StatelessWidget {
                 Icons.arrow_forward_ios,
               ),
               onTap: () {
+                // when a ListTile that represents a person is
+                // tapped, we push the detailsPageRouteName route
+                // to the Navigator and pass the person's instance
+                // to the route
                 Navigator.of(context).pushNamed(
                   detailsPageRouteName,
                   arguments: person,
@@ -95,13 +104,19 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+// #enddocregion HomePageWithListOfPeople
 
+// #docregion DetailsPageExample
 class DetailsPage extends StatelessWidget {
   const DetailsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Person person = ModalRoute.of(context)?.settings.arguments as Person;
+    // read the person instance from the arguments
+    final Person person = ModalRoute.of(
+      context,
+    )?.settings.arguments as Person;
+    // extract the age
     final age = '${person.age} years old';
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -111,6 +126,8 @@ class DetailsPage extends StatelessWidget {
       ),
       child: SafeArea(
         child: Material(
+          // use a ListTile to display the person's
+          // details since it already has a good layout
           child: ListTile(
             title: Text(person.name),
             subtitle: Text(age),
@@ -120,3 +137,4 @@ class DetailsPage extends StatelessWidget {
     );
   }
 }
+// #enddocregion DetailsPageExample
