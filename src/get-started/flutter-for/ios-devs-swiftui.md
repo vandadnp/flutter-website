@@ -20,6 +20,8 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
   - [Navigation](#navigation)
     - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
     - [How do I pop back manually?](#how-do-i-pop-back-manually)
+  - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
+    - [How do I write asynchronous code?](#how-do-i-write-asynchronous-code)
 
 ## UI Basics
 
@@ -763,3 +765,12 @@ class DetailsPage extends StatelessWidget {
   }
 }
 ```
+
+## Threading and Asynchronous Programming
+
+Dart has a single-threaded execution model, with support for `Isolate`s (a way to run Dart codes on another thread), an event loop, and asynchronous programming. Unless you spawn an `Isolate`, your Dart code runs in the main UI thread and is driven by an event loop. Flutter’s event loop is equivalent to the iOS main loop - that is, the `Looper` that is attached to the main thread.
+
+Dart's single-threaded model doesn't mean you are required to run everything as a blocking operation that causes the UI to freeze. Instead, use the asynchronous facilities that the Dart language provides, such as `async`/`await`, to perform asynchronous work.
+
+### How do I write asynchronous code?
+
