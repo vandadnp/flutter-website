@@ -19,6 +19,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
   - [Navigation](#navigation)
     - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
+    - [How do I pop back manually?](#how-do-i-pop-back-manually)
 
 ## UI Basics
 
@@ -680,6 +681,81 @@ class DetailsPage extends StatelessWidget {
           child: ListTile(
             title: Text(person.name),
             subtitle: Text(age),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### How do I pop back manually?
+
+In SwiftUI, In situations where your view needs to perform a manual pop-back to the previous screen, you should use the `dismiss` environment value as shown here. We have modified our `PersonView` struct from before and added a new button with the title of `"Pop back"` which the user can tap on in order to pop back to the previous screen:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/popback_in_swiftui/popback_in_swiftui/ContentView.swift (PopBackExample)"?> -->
+```swift
+struct PersonView: View {
+  // first define your environment value
+  @Environment(\.dismiss) private var dismiss
+  let person: Person
+  var body: some View {
+    VStack(alignment: .leading) {
+      HStack {
+        Text("Name:")
+        Text(person.name)
+      }
+      HStack {
+        Text("Age:")
+        Text("\(person.age)")
+      }
+      Divider()
+      // and then call it as a function in order
+      // to perform the dismissal
+      Button("Pop back") {
+        dismiss()
+      }
+    }
+  }
+}
+```
+
+In Flutter, to achieve the same effect, use the `pop()` function of the `Navigator` class as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/popback_in_flutter/lib/main.dart (PopBackExample)"?> -->
+```dart
+class DetailsPage extends StatelessWidget {
+  const DetailsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Person person = ModalRoute.of(
+      context,
+    )?.settings.arguments as Person;
+    final age = '${person.age} years old';
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(
+          person.name,
+        ),
+      ),
+      child: SafeArea(
+        child: Material(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(person.name),
+                subtitle: Text(age),
+              ),
+              TextButton(
+                onPressed: () {
+                  // this is the main code that allows the
+                  // view to pop back to its presenter
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Pop back'),
+              ),
+            ],
           ),
         ),
       ),
