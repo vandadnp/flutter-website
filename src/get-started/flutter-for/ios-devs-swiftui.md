@@ -774,3 +774,53 @@ Dart's single-threaded model doesn't mean you are required to run everything as 
 
 ### How do I write asynchronous code?
 
+SwiftUI has support for asynchronous code using the `async` keyword. This keyword marks a function as performing asynchronous work and you can call these functions and wait until they return their results using the `await` keyword. You can use the `await` keyword while inside a `Task`. In Flutter, with Dart as the language behind it, you can also use `async` and `await` but you don't have to worry about using `@MainActor` unlike SwiftUI. In Swift, we have a more complicated concurrency and threading model where UI work can only be performed on the main/UI thread. Flutter, using a single-threaded model, you can fetch your data using `await` and immediately consume its results in your UI.
+
+Let's say we want to write a function that fetches the weather asynchronously. In SwiftUI, you could go about doing this using a view model class that is marked as `@MainActor` and a `load()` function that internally calls an asynchronous function using `Task` or that the `load()` function is itself marked as `async`. Let's see an example of such a view model. First let's define our `Weather` enum:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_swiftui/async_in_swiftui/ContentView.swift (WeatherEnum)"?> -->
+```swift
+// a 1 second delay which we will use
+// in our mocked-api-call in a moment
+extension UInt64 {
+  static let oneSecond = UInt64(1_000_000_000)
+}
+
+// the enum that represents our weather
+enum Weather: String {
+  case rainy, windy, sunny
+}
+```
+
+After this, we will go about defining our view model and mark it as `ObservableObject` so that it can publish its `result` property of type `Weather?`:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_swiftui/async_in_swiftui/ContentView.swift (WeatherEnum)"?> -->
+```swift
+@MainActor class ContentViewModel: ObservableObject {
+  @Published private(set) var result: Weather?
+  
+  func load() async {
+    try? await Task.sleep(nanoseconds: .oneSecond)
+    self.result = .sunny
+  }
+  
+}
+```
+
+The `load()` async function is not marked as `throws` so it is not allowed to use the `try` syntax, rather it should use `try?`. In our view then we can go ahead and call the `load()` function of our view model and define our view model as a state object using `@StateObject`:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_swiftui/async_in_swiftui/ContentView.swift (ContentView)"?> -->
+```swift
+struct ContentView: View {
+  // define your view model as a state object
+  // so you can listen to its published properties
+  @StateObject var viewModel = ContentViewModel()
+  var body: some View {
+    Text(viewModel.result?.rawValue ?? "Loading...")
+      .task {
+        // await on the "load()" function
+        await viewModel.load()
+      }
+  }
+}
+```
