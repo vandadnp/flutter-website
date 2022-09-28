@@ -22,6 +22,13 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I pop back manually?](#how-do-i-pop-back-manually)
   - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
     - [How do I write asynchronous code?](#how-do-i-write-asynchronous-code)
+  - [Themes, Styles and Media](#themes-styles-and-media)
+    - [How do I change to dark theme?](#how-do-i-change-to-dark-theme)
+    - [How do I style my texts?](#how-do-i-style-my-texts)
+    - [How do I style my buttons?](#how-do-i-style-my-buttons)
+    - [How do I style my app globally?](#how-do-i-style-my-app-globally)
+    - [How do I use custom fonts?](#how-do-i-use-custom-fonts)
+    - [How do I bundle images with my app?](#how-do-i-bundle-images-with-my-app)
 
 ## UI Basics
 
@@ -908,3 +915,31 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
+
+## Themes, Styles and Media
+
+Text
+
+### How do I change to dark theme?
+
+Text
+
+### How do I style my texts?
+
+Text
+
+### How do I style my buttons?
+
+Text
+
+### How do I style my app globally?
+
+Text
+
+### How do I use custom fonts?
+
+Text
+
+### How do I bundle images with my app?
+
+Text
