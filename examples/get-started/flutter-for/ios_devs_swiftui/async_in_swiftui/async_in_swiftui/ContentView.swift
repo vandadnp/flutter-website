@@ -9,7 +9,7 @@ extension UInt64 {
 
 // the enum that represents our weather
 enum Weather: String {
-  case rainy, windy, sunny
+  case rainy, cloudy, sunny
 }
 // #enddocregion WeatherEnum
 

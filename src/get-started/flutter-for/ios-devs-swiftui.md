@@ -788,7 +788,7 @@ extension UInt64 {
 
 // the enum that represents our weather
 enum Weather: String {
-  case rainy, windy, sunny
+  case rainy, cloudy, sunny
 }
 ```
 
@@ -824,3 +824,52 @@ struct ContentView: View {
   }
 }
 ```
+
+Although we could have done all of this without a view model and with much less code, it's important to also show real-life examples and compare SwiftUI with Flutter in those cases too.
+
+Flutter does not have the reactive model that SwiftUI has with `@MainActor`, `@Published` and `ObservableObject`. Instead, Flutter uses a much simpler model of using `Future` for work that will be done, well, in the future and completes after producing a value (or completes without producing a value). Flutter also has support for `Stream`, which is a class similar to `Future`. Whereas `Future` optionally produces maximum of 1 value, `Stream` can produce more than 1 value before it completes. To display the results of a `Future` on screen we will use a `FutureBuilder` and to display the results of a `Stream` we need to use `StreamBuilder`. Both these *builder* classes are essentially widgets that can be displayed in your widget-tree.
+
+Let's start off by creating our `Weather` enum in Flutter:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (WeatherEnum)"?> -->
+```dart
+enum Weather {
+  rainy,
+  windy,
+  sunny,
+}
+```
+
+Then we can create a simple view model similiar to that which we created in SwiftUI that fetches the weather for us. Since in Flutter, `ObservableObject` is simply represented with either a `Future` or `Stream`, we can go ahead and simply return a `Future<Weather>` from a function within our view model like so:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (HomePageViewModel)"?> -->
+```dart
+@immutable
+class HomePageViewModel {
+  const HomePageViewModel();
+  Future<Weather> load() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return Weather.sunny;
+  }
+}
+```
+
+If you look at the `load()` function in our view model, you can see similarities to our SwiftUI code such as this: the `load()` function is marked as `async` because internally, it is using the `await` keyword. Note that Dart functions are marked with `async` only if they are using `await` inside them, but you can also write the same `load()` function without marking the function as `async`, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (HomePageViewModelWithoutAsync)"?> -->
+```dart
+class HomePageViewModel {
+  const HomePageViewModel();
+  Future<Weather> load() {
+    return Future.delayed(const Duration(seconds: 1))
+        .then((_) => Weather.sunny);
+  }
+}
+```
+
+This example is using the `then()` function on `Future<T>` which synchronously maps a `Future`'s value into another value. It's similar to how Combine works with its `map()` function but that's outside the scope of this section of the document.
+
+Going back to our `load()` function marked as `async()`, you can also note that inside a function that is marked as `async`, you can simply use the `return` statement to synchronously return a value which then in turn will be placed inside the resulting `Future`. In other words, you don't have to create a `Future` instance manually inside functions that are marked as `async`. This is another similarity between our SwiftUI and Flutter code.
+
+Now that our view model is in place, we can start writing our view code that consumes the `Future` returned by the `load()` function. Since it's a `Future` that we want to consume, we need to use the `FutureBuilder` widget in order to display the resulting `Weather` to the user:
+
