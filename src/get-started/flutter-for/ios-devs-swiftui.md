@@ -873,3 +873,38 @@ Going back to our `load()` function marked as `async()`, you can also note that 
 
 Now that our view model is in place, we can start writing our view code that consumes the `Future` returned by the `load()` function. Since it's a `Future` that we want to consume, we need to use the `FutureBuilder` widget in order to display the resulting `Weather` to the user:
 
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (HomePage)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  final HomePageViewModel viewModel = const HomePageViewModel();
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      // feed a FutureBuilder to your widget tree
+      child: FutureBuilder<Weather>(
+        // specify the Future that you want to track
+        future: viewModel.load(),
+        builder: (context, snapshot) {
+          // a snapshot is of type `AsyncSnapshot` and contains the 
+          // state of the Future. By looking if the snapshot contains
+          // an error or if the data is null, you can decide what to
+          // show to the user.
+          if (snapshot.hasData) {
+            return Center(
+              child: Text(
+                snapshot.data.toString(),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+```
