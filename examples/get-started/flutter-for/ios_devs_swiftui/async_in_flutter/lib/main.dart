@@ -59,9 +59,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      // feed a FutureBuilder to your widget tree
       child: FutureBuilder<Weather>(
+        // specify the Future that you want to track
         future: viewModel.load(),
         builder: (context, snapshot) {
+          // a snapshot is of type `AsyncSnapshot` and contains the
+          // state of the Future. By looking if the snapshot contains
+          // an error or if the data is null, you can decide what to
+          // show to the user.
           if (snapshot.hasData) {
             return Center(
               child: Text(

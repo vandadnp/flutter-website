@@ -24,7 +24,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I write asynchronous code?](#how-do-i-write-asynchronous-code)
     - [How do I produce streams of data asynchronously?](#how-do-i-produce-streams-of-data-asynchronously)
   - [Themes, Styles and Media](#themes-styles-and-media)
-    - [How do I change to dark theme?](#how-do-i-change-to-dark-theme)
+    - [How do I change to dark mode?](#how-do-i-change-to-dark-mode)
     - [How do I style my texts?](#how-do-i-style-my-texts)
     - [How do I style my buttons?](#how-do-i-style-my-buttons)
     - [How do I style my app globally?](#how-do-i-style-my-app-globally)
@@ -925,11 +925,48 @@ Text
 
 ## Themes, Styles and Media
 
-Text
+Flutter applications are very easy to style; you can easily switch between light and dark themes, change the style of your text and UI components and much more. In this section we will discuss some of the most important aspects of styling your Flutter apps and compare them with how you would do things in SwiftUI.
 
-### How do I change to dark theme?
+### How do I change to dark mode?
 
-Text
+In SwiftUI, if you prefer use dark mode for your views, you can simply call the `preferredColorScheme()` function that is implemented on `View`, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/darktheme_in_swiftui/darktheme_in_swiftui/ContentView.swift (ContentView)"?> -->
+```swift
+@main
+struct darktheme_in_swiftuiApp: App {
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .preferredColorScheme(.dark)
+    }
+  }
+}
+```
+
+You just need to ensure to do the same function call on all views that prefer a dark color scheme. In Flutter, you control light and dark mode on the app-level using the `theme` property of your `CupertinoApp` class as shown  here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/darktheme_in_flutter/lib/main.dart (DarkModeExample)"?> -->
+```dart
+class App extends StatelessWidget {
+  const App({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const CupertinoApp(
+      theme: CupertinoThemeData(
+        brightness: Brightness.dark,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+```
+
+This modification will ensure all your widgets by default use the dark theme.
 
 ### How do I style my texts?
 
