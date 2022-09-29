@@ -1004,7 +1004,7 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
-            color: Colors.yellow,
+            color: CupertinoColors.systemYellow,
           ),
         ),
       ),
@@ -1015,7 +1015,60 @@ class HomePage extends StatelessWidget {
 
 ### How do I style my buttons?
 
-Text
+Styling buttons in SwiftUI is similar to how you would style instances of `Text` as we've seen already. You would use modifier functions that are defined either on `View` itself or specifically on `Button` where the former modifiers will work on any `View` instance and the latter case where the modifiers are only applicable to `Button` instances. Let's see an example:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/buttonstyle_in_swiftui/buttonstyle_in_swiftui/ContentView.swift (StylingButtonExample)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    Button("Do something") {
+        // do something when button is tapped
+      }
+      .padding()
+      .font(.system(size: 30, weight: .bold))
+      .background(Color.yellow)
+      .foregroundColor(Color.blue)
+      .cornerRadius(20)
+  }
+}
+```
+
+You can achieve the same effect in Flutter by using the `CupertinoButton` widget and setting the style of its child and some of the other properties such as its background color on the button itself, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/buttonstyle_in_flutter/lib/main.dart (StylingButtonExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text(
+          'Cupertino',
+        ),
+      ),
+      child: Center(
+        child: CupertinoButton(
+          color: CupertinoColors.systemYellow,
+          onPressed: () {},
+          padding: const EdgeInsets.all(16),
+          child: const Text(
+            'Do something',
+            style: TextStyle(
+              color: CupertinoColors.systemBlue,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+One thing to note here is that in SwiftUI, you set the title of a button as a `String` object whereas in Flutter, since everything is a widget (or view as you'd know them in iOS), the title of the button itself is a widget so you assign a `Text` to the `child` property of your button and that becomes the title, or the child which you can style separately. So the knowledge you have about styling a `Text` widget comes in handy when styling a `CupertinoButton` since in this case the `child` of our button is in fact a `Text` widget!
 
 ### How do I style my app globally?
 

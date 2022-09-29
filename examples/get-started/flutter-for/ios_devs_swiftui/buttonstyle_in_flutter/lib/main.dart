@@ -24,29 +24,34 @@ class App extends StatelessWidget {
   }
 }
 
-// #docregion StylingTextExample
+// #docregion StylingButtonExample
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(
         middle: Text(
           'Cupertino',
         ),
       ),
       child: Center(
-        child: Text(
-          'Hello, world!',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: CupertinoColors.systemYellow,
+        child: CupertinoButton(
+          color: CupertinoColors.systemYellow,
+          onPressed: () {},
+          padding: const EdgeInsets.all(16),
+          child: const Text(
+            'Do something',
+            style: TextStyle(
+              color: CupertinoColors.systemBlue,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
     );
   }
 }
-// #enddocregion StylingTextExample
+// #enddocregion StylingButtonExample
