@@ -970,7 +970,48 @@ This modification will ensure all your widgets by default use the dark theme.
 
 ### How do I style my texts?
 
-Text
+In SwiftUI, you would use modifier functions in order to modify the behavior of your UI components. For instance, you can change the font of a `Text` using the `font()` modifier function that has various overloads with different parameters and in turn returns a new `Text`. In other words, you chain your modifiers until you land with your final `Text` or UI component as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/textstyle_in_swiftui/textstyle_in_swiftui/ContentView.swift (StylingTextExample)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    Text("Hello, world!")
+      .font(.system(size: 30, weight: .heavy))
+      .foregroundColor(.yellow)
+  }
+}
+```
+
+In Flutter, to style your texts, use the `style` parameter of your `Text` widget as shown here. This code achieves the same effect as the SwiftUI code prior to it:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/darktheme_in_flutter/lib/main.dart (DarkModeExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(
+          'Cupertino',
+        ),
+      ),
+      child: Center(
+        child: Text(
+          'Hello, world!',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.yellow,
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
 
 ### How do I style my buttons?
 
