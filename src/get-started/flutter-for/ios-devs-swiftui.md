@@ -1128,6 +1128,10 @@ class HomePage extends StatelessWidget {
 }
 ```
 
+{{site.alert.secondary}}
+  Check out [Google Fonts](https://fonts.google.com) to download custom fonts that you can use in your apps.
+{{site.alert.end}}
+
 ### How do I bundle images with my app?
 
 Text
