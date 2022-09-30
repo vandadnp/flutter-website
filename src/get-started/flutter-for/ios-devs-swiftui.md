@@ -28,9 +28,13 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I style my texts?](#how-do-i-style-my-texts)
     - [How do I style my buttons?](#how-do-i-style-my-buttons)
     - [How do I use custom fonts?](#how-do-i-use-custom-fonts)
-    - [How do I bundle images with my app?](#how-do-i-bundle-images-with-my-app)
+    - [How do I bundle images in my app?](#how-do-i-bundle-images-in-my-app)
+    - [How do I bundle videos in my app?](#how-do-i-bundle-videos-in-my-app)
+  - [Networking, HTTP and JSON](#networking-http-and-json)
     - [How do I load network images?](#how-do-i-load-network-images)
-    - [How do I load videos?](#how-do-i-load-videos)
+    - [How do I make a GET request?](#how-do-i-make-a-get-request)
+    - [How do I send HTTP headers?](#how-do-i-send-http-headers)
+    - [How do I parse JSON?](#how-do-i-parse-json)
 
 ## UI Basics
 
@@ -1107,6 +1111,7 @@ flutter:
 
 After this, you can start using your font just like you did in the SwiftUI example, but this time in Flutter:
 
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customfont_in_flutter/lib/main.dart (FontInTextExample)"?> -->
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -1132,7 +1137,61 @@ class HomePage extends StatelessWidget {
   Check out [Google Fonts](https://fonts.google.com) to download custom fonts that you can use in your apps.
 {{site.alert.end}}
 
-### How do I bundle images with my app?
+### How do I bundle images in my app?
+
+In SwiftUI, to add an image to your application, whether it's an SVG, PDF or JPG/PNG, you would usually add those images to your `Assets.xcassets` and then display those images using the `Image` view. Assuming that you've already added a single-scale image named "Blueberries.jpg" to your `Assets.xcassets`, you can then go ahead and display that image as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customimages_in_swiftui/customimages_in_swiftui/ContentView.swift (CustomImagesExample)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    Image("Blueberries")
+      .resizable()
+      .aspectRatio(contentMode: .fit)
+      .frame(
+        maxWidth: 200,
+        maxHeight: 200
+      )
+  }
+}
+```
+
+In Flutter, assuming that you have added this image to your project structure inside a folder called `images/` so you end up with `images/Blueberries.jpg`, you need to first tell your Flutter application about this image inside the `pubspec.yaml` file as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customimages_in_flutter/pubspec.yaml (ImageInPubspecExample)"?> -->
+```yaml
+flutter:
+  assets:
+    - images/Blueberries.jpg
+```
+
+After defining your custom image, you can display it on the screen using the `Image` widget's `.asset()` constructor. This constructor instantiates the given image using the provided path and reads the image from the assets that are bundled with your app, and displays the image on the screen:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customimages_in_flutter/lib/main.dart (CustomImageExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: Center(
+        child: Image.asset(
+          "images/Blueberries.jpg",
+          width: 200,
+          height: 200,
+        ),
+      ),
+    );
+  }
+}
+```
+
+### How do I bundle videos in my app?
+
+Text
+
+## Networking, HTTP and JSON
 
 Text
 
@@ -1140,6 +1199,15 @@ Text
 
 Text
 
-### How do I load videos?
+### How do I make a GET request?
 
 Text
+
+### How do I send HTTP headers?
+
+Text
+
+### How do I parse JSON?
+
+Text
+
