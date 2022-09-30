@@ -27,7 +27,6 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I change to dark mode?](#how-do-i-change-to-dark-mode)
     - [How do I style my texts?](#how-do-i-style-my-texts)
     - [How do I style my buttons?](#how-do-i-style-my-buttons)
-    - [How do I style my app globally?](#how-do-i-style-my-app-globally)
     - [How do I use custom fonts?](#how-do-i-use-custom-fonts)
     - [How do I bundle images with my app?](#how-do-i-bundle-images-with-my-app)
     - [How do I load network images?](#how-do-i-load-network-images)
@@ -1070,13 +1069,41 @@ class HomePage extends StatelessWidget {
 
 One thing to note here is that in SwiftUI, you set the title of a button as a `String` object whereas in Flutter, since everything is a widget (or view as you'd know them in iOS), the title of the button itself is a widget so you assign a `Text` to the `child` property of your button and that becomes the title, or the child which you can style separately. So the knowledge you have about styling a `Text` widget comes in handy when styling a `CupertinoButton` since in this case the `child` of our button is in fact a `Text` widget!
 
-### How do I style my app globally?
-
-Text
-
 ### How do I use custom fonts?
 
-Text
+In SwiftUI, to add and use a custom font in your application, you will need to first ensure that the font is part of your application binary by dragging it into your Xcode project. Then you will need to go to your target's Info tab and add the `UIAppFonts` key which is an array, and then add the path of your `.ttf` file as a child of this array. Once you've done that, you need to know the font-name in order to create a `Font` instance because the font name won't always match the name of the file for the font. You can always iterate through the font families available to your application using `UIFont.familyNames.forEach` and then for each family name, iterate the available font names using `UIFont.fontNames(forFamilyName:)`.
+
+Once you have your font name, you can use the `.font()` modifier function in order to apply it to your UI components as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customfont_in_swiftui/customfont_in_swiftui/ContentView.swift (CustomFontExample)"?> -->
+```swift
+struct ContentView: View {
+  var body: some View {
+    Text("Hello")
+      .font(
+        Font.custom(
+          "Roboto-Medium",
+          size: 40
+        )
+      )
+  }
+}
+```
+
+In Flutter, you usually don't go about poking in platform specific files such as an Info.plist file so instead, you control your resources with a file called `pubspec.yaml`. To add a custom font to your project, follow these steps:
+
+1. Create a folder called `fonts` (this is an optional step but quite neat to organize your fonts within the same folder) in your project's root directory.
+2. Add your .ttf, .otf or .ttc font file(s) into your `fonts` folder.
+3. Open the `pubspec.yaml` file within your project and find the `flutter:` section and add your custom font(s) under the `fonts` section as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customfont_in_flutter/pubspec.yaml (FontFileInYaml)"?> -->
+```yaml
+flutter:
+  fonts:
+    - family: BungeeSpice
+      fonts:
+        - asset: fonts/BungeeSpice-Regular.ttf
+```
 
 ### How do I bundle images with my app?
 
