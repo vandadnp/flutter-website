@@ -1094,7 +1094,7 @@ In Flutter, you usually don't go about poking in platform specific files such as
 
 1. Create a folder called `fonts` (this is an optional step but quite neat to organize your fonts within the same folder) in your project's root directory.
 2. Add your .ttf, .otf or .ttc font file(s) into your `fonts` folder.
-3. Open the `pubspec.yaml` file within your project and find the `flutter:` section and add your custom font(s) under the `fonts` section as shown here:
+3. Open the `pubspec.yaml` file within your project and find the `flutter` section and add your custom font(s) under the `fonts` section as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/customfont_in_flutter/pubspec.yaml (FontFileInYaml)"?> -->
 ```yaml
@@ -1103,6 +1103,29 @@ flutter:
     - family: BungeeSpice
       fonts:
         - asset: fonts/BungeeSpice-Regular.ttf
+```
+
+After this, you can start using your font just like you did in the SwiftUI example, but this time in Flutter:
+
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const CupertinoPageScaffold(
+      child: Center(
+        child: Text(
+          'Hello',
+          style: TextStyle(
+            fontSize: 40,
+            fontFamily: 'BungeeSpice',
+          ),
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ### How do I bundle images with my app?
