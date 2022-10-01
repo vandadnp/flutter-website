@@ -1189,7 +1189,100 @@ class HomePage extends StatelessWidget {
 
 ### How do I bundle videos in my app?
 
-Text
+To play a local video file bundled within your app in SwiftUI, you need to simply import the `AVKit` framework and create an instance of the `VideoPlayer` view. Let's say that we have a file called `movie.mov` which we have included in our app bundle. Here is how you could play that inside a video player in SwiftUI:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/bundledvideos_in_swiftui/bundledvideos_in_swiftui/ContentView.swift (BundledVideosExample)"?> -->
+```swift
+import AVKit
+
+struct ContentView: View {
+  var body: some View {
+    if let url = Bundle.main.url(
+      forResource: "movie",
+      withExtension: "mov"
+    ) {
+      VideoPlayer(
+        player: AVPlayer(
+          url: url
+        )
+      )
+    } else {
+      Text("Could not find movie.mov file in app bundle")
+    }
+  }
+}
+```
+
+In Flutter, to do the same thing, first you'll need to add the [video_player](https://pub.dev/packages/video_player) plugin to your project. This plugin allows you to create a video player that works on Android, iOS and on the web so with the same source code, you will have a video player that works on all 3 platforms. To add the `video_player` plugin to your Flutter project, use the `flutter pub add video_player` command in Terminal. This will add `video_player` to your `pubspec.yaml` file.
+
+You then need to add the video file itself to your project. Assuming that you've created a folder called `videos` in your project's root folder and then placed the `movie.mov` file inside this folder, you'll need to ask Flutter to bundle this asset in your application by adding it to your `pubspec.yaml` file as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/bundledvideos_in_flutter/pubspec.yaml (AddingMovieToPubspec)"?> -->
+```yaml
+flutter:
+  assets:
+    - videos/movie.mov
+```
+
+After this, you can go ahead and use the `VideoPlayerController` class in order to load and play your video file, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/bundledvideos_in_flutter/lib/main.dart (BundledVideosExample)"?> -->
+```dart
+import 'package:flutter/cupertino.dart';
+import 'package:video_player/video_player.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // start the loading process
+    _controller = VideoPlayerController.asset('videos/movie.mov')
+      ..initialize().then(
+        // once video is loaded, refresh your widget and ensure
+        // the video player starts automatically and loops
+        (_) => setState(
+          () {
+            _controller.setLooping(true);
+            _controller.play();
+          },
+        ),
+      );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: Center(
+        // if video player is initialized meaning that its
+        // asset is loaded, display the video player
+        child: _controller.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              )
+            // if video player is not initialized, display a
+            // loading indicator
+            : const CupertinoActivityIndicator(),
+      ),
+    );
+  }
+}
+```
 
 ## Networking, HTTP and JSON
 
