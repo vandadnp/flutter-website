@@ -1286,11 +1286,58 @@ class _HomePageState extends State<HomePage> {
 
 ## Networking, HTTP and JSON
 
-Text
+Networking is an important part of modern applications, be it mobile or web apps. In this section, we will have a look at similarities and differences between how SwiftUI and Flutter handle networking and learn more about Flutter's way of dealing with asynchronous network calls.
 
 ### How do I load network images?
 
-Text
+In SwiftUI, to load a network image, you'd use the `AsyncImage` class as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/networkimages_in_swiftui/networkimages_in_swiftui/ContentView.swift (NetworkImageExample)"?> -->
+```swift
+let url = URL(
+  string: "https://images.unsplash.com/photo-1521790797524-b2497295b8a0"
+)
+
+struct ContentView: View {
+  var body: some View {
+    AsyncImage(url: url) { image in
+      image
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+    } placeholder: {
+      ProgressView()
+    }
+    .frame(
+      maxWidth: 300,
+      maxHeight: 300
+    )
+  }
+}
+```
+
+In Flutter, to achieve the same results, you can simply use the `Image` class just like we did for local assets, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/networkimages_in_flutter/lib/main.dart (NetworkImageExample)"?> -->
+```dart
+const url = 'https://images.unsplash.com/photo-1521790797524-b2497295b8a0';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: Center(
+        child: Image.network(
+          url,
+          width: 300,
+          height: 300,
+        ),
+      ),
+    );
+  }
+}
+```
 
 ### How do I make a GET request?
 

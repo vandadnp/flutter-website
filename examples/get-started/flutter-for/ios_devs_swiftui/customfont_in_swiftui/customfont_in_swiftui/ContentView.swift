@@ -12,7 +12,7 @@ struct ContentView: View {
       )
   }
 }
-// #docregion CustomFontExample
+// #enddocregion CustomFontExample
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {

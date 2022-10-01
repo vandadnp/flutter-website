@@ -13,7 +13,7 @@ struct ContentView: View {
       .cornerRadius(20)
   }
 }
-// #docregion StylingButtonExample
+// #enddocregion StylingButtonExample
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {

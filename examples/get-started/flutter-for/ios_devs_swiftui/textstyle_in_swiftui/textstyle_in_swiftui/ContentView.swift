@@ -8,7 +8,7 @@ struct ContentView: View {
       .foregroundColor(.yellow)
   }
 }
-// #docregion StylingTextExample
+// #enddocregion StylingTextExample
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
