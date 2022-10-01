@@ -1341,7 +1341,38 @@ class HomePage extends StatelessWidget {
 
 ### How do I make a GET request?
 
-Text
+In SwiftUI, you can use the `URLSession` class to make an HTTP GET call and receive the data for a given URL as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/httpget_in_swiftui/httpget_in_swiftui/ContentView.swift (HttpGetCallExample)"?> -->
+```swift
+struct ContentView: View {
+  // a state variable that keeps track of whether we
+  // fetched our data or not
+  @State var hasReceivedData = false
+  var body: some View {
+    Text(hasReceivedData ? "Got data" : "Loading...")
+      // upon this text being displayed, attempt to retrieve the data
+      // and associated the results with the state variable
+      .task {
+        self.hasReceivedData = (try? await loadData()) ?? false
+      }
+  }
+  
+  // this function will load the data for us
+  func loadData() async throws -> Bool {
+    guard let url = URL(
+      string: "https://jsonplaceholder.typicode.com/posts"
+    ) else {
+      return false
+    }
+    let request = URLRequest(url: url)
+    let (data, _) = try await URLSession.shared.data(for: request)
+    // do something with the data here
+    print(data.count)
+    return true
+  }
+}
+```
 
 ### How do I send HTTP headers?
 
