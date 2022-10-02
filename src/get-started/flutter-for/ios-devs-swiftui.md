@@ -1374,12 +1374,45 @@ struct ContentView: View {
 }
 ```
 
+In Flutter, start off by adding the `http` package to your application by executing `flutter pub add http` in the terminal in the root folder of your project. Then go ahead and parse the data using the `http` package and display the results using `FutureBuilder` as demonstrated here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/httpget_in_flutter/lib/main.dart (HttpGetExample)"?> -->
+```dart
+const url = 'https://jsonplaceholder.typicode.com/posts';
+
+Future<bool> loadData() async {
+  final response = await http.get(Uri.parse(url));
+  return response.statusCode == 200;
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: Center(
+        child: FutureBuilder<bool>(
+          future: loadData(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return const Text('Got data');
+            } else {
+              return const Text('Loading...');
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
 ### How do I parse JSON?
 
 In SwiftUI, to parse JSON you would first make classes that represent the parsed JSON, and make them conform to the `Codable` protocol. After that, you can use the `JSONDecoder` class to parse your JSON and assign the results to a simple `@State` variable to update your UI. Here is a very simple example of how you can go about doing this in SwiftUI:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/jsonparsing_in_swiftui/jsonparsing_in_swiftui/ContentView.swift (NetworkImageExample)"?> -->
-
 ```swift
 struct Post: Codable {
   let userId: Int
