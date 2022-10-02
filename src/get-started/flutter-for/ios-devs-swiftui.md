@@ -36,6 +36,11 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I parse JSON?](#how-do-i-parse-json)
     - [How do I make a POST HTTP call with headers?](#how-do-i-make-a-post-http-call-with-headers)
   - [OS and Hardware Interaction](#os-and-hardware-interaction)
+    - [How do I access user photos?](#how-do-i-access-user-photos)
+    - [How do I access GPS coordinates?](#how-do-i-access-gps-coordinates)
+    - [How do I access the camera?](#how-do-i-access-the-camera)
+    - [How do I persist user settings?](#how-do-i-persist-user-settings)
+    - [How do I access the accelerometer?](#how-do-i-access-the-accelerometer)
 
 ## UI Basics
 
@@ -1619,3 +1624,22 @@ class HomePage extends StatelessWidget {
 
 When developing applications, you'll most likely need to interact with *some* hardare features such as accessing the camera or the GPS coordinates. You might also need to be able to access the user's contacts information or photos on their device. In this section of the document, we will look at some of these features and how you can access them with Flutter.
 
+### How do I access user photos?
+
+Text
+
+### How do I access GPS coordinates?
+
+Text
+
+### How do I access the camera?
+
+Text
+
+### How do I persist user settings?
+
+Text
+
+### How do I access the accelerometer?
+
+Text
