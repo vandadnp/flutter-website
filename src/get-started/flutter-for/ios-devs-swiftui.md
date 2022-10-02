@@ -33,8 +33,8 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
   - [Networking, HTTP and JSON](#networking-http-and-json)
     - [How do I load network images?](#how-do-i-load-network-images)
     - [How do I make a GET request?](#how-do-i-make-a-get-request)
-    - [How do I send HTTP headers?](#how-do-i-send-http-headers)
     - [How do I parse JSON?](#how-do-i-parse-json)
+    - [How do I send HTTP headers?](#how-do-i-send-http-headers)
 
 ## UI Basics
 
@@ -1374,11 +1374,127 @@ struct ContentView: View {
 }
 ```
 
+### How do I parse JSON?
+
+In SwiftUI, to parse JSON you would first make classes that represent the parsed JSON, and make them conform to the `Codable` protocol. After that, you can use the `JSONDecoder` class to parse your JSON and assign the results to a simple `@State` variable to update your UI. Here is a very simple example of how you can go about doing this in SwiftUI:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/jsonparsing_in_swiftui/jsonparsing_in_swiftui/ContentView.swift (NetworkImageExample)"?> -->
+
+```swift
+struct Post: Codable {
+  let userId: Int
+  let id: Int
+  let title: String
+  let body: String
+}
+
+struct ContentView: View {
+  @State private var posts = [Post]()
+  var body: some View {
+    List(self.posts, id: \.id) { post in
+      VStack(alignment: .leading) {
+        Text(post.title)
+          .font(.title)
+        Text(post.body)
+          .font(.body)
+      }
+    }
+    .task {
+      await loadData()
+    }
+  }
+  
+  private func loadData() async {
+    guard let url = URL(
+      string: "https://jsonplaceholder.typicode.com/posts"
+    ) else {
+      return
+    }
+    do {
+      let (data, _) = try await URLSession.shared.data(from: url)
+      let decoder = JSONDecoder()
+      let posts = try decoder.decode([Post].self, from: data)
+      self.posts = posts
+    } catch {
+      // handle this gracefully
+    }
+  }
+}
+```
+
+In Flutter, we can start off by adding the `http` package to our application by executing `flutter pub add http` in the root folder of our application in the Terminal. Then we go ahead and define our `Post` model object and handle the JSON parsing inside it:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/jsonparsing_in_flutter/lib/main.dart (JsonObjectExample)"?> -->
+```dart
+@immutable
+class Post {
+  final int userId;
+  final int id;
+  final String title;
+  final String body;
+  Post.fromJson(Map<String, dynamic> json)
+      : userId = json['userId'],
+        id = json['id'],
+        title = json['title'],
+        body = json['body'];
+}
+```
+
+Then we need to actually download the data for our JSON and parse it into an array of `Post` objects like so:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/jsonparsing_in_flutter/lib/main.dart (ParsingFutureExample)"?> -->
+```dart
+const url = 'https://jsonplaceholder.typicode.com/posts';
+
+Future<Iterable<Post>> loadData() async {
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    final Iterable json = jsonDecode(response.body);
+    return json.map((e) => Post.fromJson(e));
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+```
+
+Since now we have our `Future` instance, we can use `FutureBuilder` to consume it and turn it into a list view as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/jsonparsing_in_flutter/lib/main.dart (ConsumesJsonFutureExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: FutureBuilder<Iterable<Post>>(
+        future: loadData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Material(
+              child: ListView(
+                children: snapshot.requireData
+                    .map(
+                      (post) => ListTile(
+                        title: Text(post.title),
+                        subtitle: Text(post.body),
+                      ),
+                    )
+                    .toList(),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+```
+
 ### How do I send HTTP headers?
 
 Text
-
-### How do I parse JSON?
-
-Text
-
