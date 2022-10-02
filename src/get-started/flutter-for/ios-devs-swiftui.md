@@ -35,6 +35,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I make a GET request?](#how-do-i-make-a-get-request)
     - [How do I parse JSON?](#how-do-i-parse-json)
     - [How do I make a POST HTTP call with headers?](#how-do-i-make-a-post-http-call-with-headers)
+  - [OS and Hardware Interaction](#os-and-hardware-interaction)
 
 ## UI Basics
 
@@ -1613,3 +1614,8 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
+
+## OS and Hardware Interaction
+
+When developing applications, you'll most likely need to interact with *some* hardare features such as accessing the camera or the GPS coordinates. You might also need to be able to access the user's contacts information or photos on their device. In this section of the document, we will look at some of these features and how you can access them with Flutter.
+
