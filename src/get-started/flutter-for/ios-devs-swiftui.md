@@ -34,7 +34,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I load network images?](#how-do-i-load-network-images)
     - [How do I make a GET request?](#how-do-i-make-a-get-request)
     - [How do I parse JSON?](#how-do-i-parse-json)
-    - [How do I send HTTP headers?](#how-do-i-send-http-headers)
+    - [How do I make a POST HTTP call with headers?](#how-do-i-make-a-post-http-call-with-headers)
 
 ## UI Basics
 
@@ -1528,6 +1528,88 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-### How do I send HTTP headers?
+### How do I make a POST HTTP call with headers?
 
-Text
+In SwiftUI, you can create an instance of `URLRequest` and change its `httpMethod` property to `"POST"` in order to send a POST HTTP request to a URL. You can also set header values on your `URLRequest` instance using the `setValue(:forHTTPHeaderField)` function of the request as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/httppost_in_swiftui/httppost_in_swiftui/ContentView.swift (HttpPostExample)"?> -->
+```swift
+struct ContentView: View {
+  @State private var result: String?
+  var body: some View {
+    Text(result ?? "Loading...")
+    .task {
+      self.result = await postData()
+    }
+  }
+  
+  private func postData() async -> String? {
+    guard let url = URL(
+      string: "https://reqbin.com/sample/post/json"
+    ) else {
+      return nil
+    }
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue(
+      "application/json",
+      forHTTPHeaderField: "Content-Type"
+    )
+    let object = ["key": "value"]
+    do {
+      let json = try JSONSerialization.data(withJSONObject: object)
+      request.httpBody = json
+      let (data, _) = try await URLSession.shared.data(for: request)
+      let str = String(data: data, encoding: .utf8)
+      return str
+    } catch {
+      // handle this gracefully
+      return nil
+    }
+  }
+}
+```
+
+In Flutter, you would start off by adding the `http` package to your application using `flutter pub add http` command in the terminal and then send your POST HTTP call using the `http` package. The result of your function that makes the call can be a `Future` which you can consume using a `FutureBuilder` as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/httppost_in_flutter/lib/main.dart (HttpPostExample)"?> -->
+```dart
+Future<String> postData() async {
+  final response = await http.post(
+    Uri.parse('https://reqbin.com/sample/post/json'),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'key': 'value',
+    }),
+  );
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception('Failed to post data');
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: Center(
+        child: FutureBuilder<String>(
+          future: postData(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.requireData);
+            } else {
+              return const Text('Loading...');
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
