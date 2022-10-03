@@ -37,8 +37,8 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I make a POST HTTP call with headers?](#how-do-i-make-a-post-http-call-with-headers)
   - [OS and Hardware Interaction](#os-and-hardware-interaction)
     - [How do I access user photos?](#how-do-i-access-user-photos)
-    - [How do I access GPS coordinates?](#how-do-i-access-gps-coordinates)
     - [How do I access the camera?](#how-do-i-access-the-camera)
+    - [How do I access GPS coordinates?](#how-do-i-access-gps-coordinates)
     - [How do I persist user settings?](#how-do-i-persist-user-settings)
     - [How do I access the accelerometer?](#how-do-i-access-the-accelerometer)
 
@@ -1764,6 +1764,160 @@ class _HomePageState extends State<HomePage> {
 }
 ```
 
+### How do I access the camera?
+
+To display the camera view programmatically in SwiftUI, you will have to create a bridge between your SwiftUI view-code to pure Swift code that interacts with `UIImagePickerController`. The interactivity code that you'll write probably will end up looking like this:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/camera_in_swiftui/camera_in_swiftui/ContentView.swift (CameraPickerExample)"?> -->
+```swift
+struct CameraPicker: UIViewControllerRepresentable {
+  
+  @Binding var isPresented: Bool
+  @Binding var image: Image?
+  
+  func updateUIViewController(
+    _ uiViewController: UIImagePickerController,
+    context: Context
+  ) {
+    // empty for now
+  }
+  
+  func makeCoordinator() -> Coordinator {
+    Coordinator(
+      isPresented: $isPresented,
+      image: $image
+    )
+  }
+  
+  enum Errors: Error {
+    case noCameraAccess
+  }
+  
+  func makeUIViewController(
+    context: Context
+  ) -> UIImagePickerController {
+    let controller = UIImagePickerController()
+    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+      controller.sourceType = .camera
+    }
+    controller.delegate = context.coordinator
+    return controller
+  }
+  
+  class Coordinator: NSObject,
+                     UINavigationControllerDelegate,
+                     UIImagePickerControllerDelegate {
+    
+    @Binding var isPresented: Bool
+    @Binding var image: Image?
+    
+    init(
+      isPresented: Binding<Bool>,
+      image: Binding<Image?>
+    ) {
+      self._isPresented = isPresented
+      self._image = image
+    }
+    
+    func imagePickerController(
+      _ picker: UIImagePickerController,
+      didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+    ) {
+      defer {
+        isPresented = false
+      }
+      guard let uiImage = info[
+        UIImagePickerController.InfoKey.originalImage
+      ] as? UIImage else {
+        return
+      }
+      self.image = Image(uiImage: uiImage)
+    }
+    
+    func imagePickerControllerDidCancel(
+      _ picker: UIImagePickerController
+    ) {
+      isPresented = false
+    }
+    
+  }
+  
+}
+```
+
+Once you have the bridge, you can use it in your view as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/camera_in_swiftui/camera_in_swiftui/ContentView.swift (CameraViewExample)"?> -->
+```swift
+struct ContentView: View {
+  
+  @State private var isPresented = false
+  @State private var image: Image?
+  
+  var body: some View {
+    VStack {
+      Button("Display camera picker") {
+        isPresented.toggle()
+      }.sheet(isPresented: $isPresented) {
+        CameraPicker(
+          isPresented: $isPresented,
+          image: $image
+        )
+      }
+      if image != nil {
+        image!
+          .resizable()
+          .frame(maxWidth: 200, maxHeight: 200)
+      }
+    }
+  }
+}
+```
+
+In Flutter, to access the camera, you'll need to use the [image_picker](https://pub.dev/packages/image_picker) plugin just like we do when we want to access the photo library. The code will look almost exactly the same as when we accessed the photo library but this time we just ask for the camera instead of the photo album, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/camera_in_flutter/lib/main.dart (CameraExample)"?> -->
+```dart
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _picker = ImagePicker();
+  Image? image;
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Column(
+          children: [
+            CupertinoButton(
+              onPressed: () async {
+                final result =
+                    await _picker.pickImage(source: ImageSource.camera);
+                if (result != null) {
+                  final path = result.path;
+                  final file = File(path);
+                  // convert file to Image
+                  setState(() {
+                    image = Image.file(file);
+                  });
+                }
+              },
+              child: const Text('Pick Image'),
+            ),
+            if (image != null) image!,
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
 ### How do I access GPS coordinates?
 
 In SwiftUI, you can use the `CLLocationManager` class in order to access the user's location. You will need to import `CoreLocation` to use the location manager, and optionally `CoreLocationUI` if you want to display an instance of the `LocationButton` class. Your location manager would probably look like this:
@@ -1887,10 +2041,6 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
-
-### How do I access the camera?
-
-Text
 
 ### How do I persist user settings?
 
