@@ -1823,6 +1823,71 @@ struct ContentView: View {
 }
 ```
 
+In Flutter, to access the user's location, you'll need to use the [geolocator](https://pub.dev/packages/geolocator) package. This package allows you to work with location services on iOS, Androd, macOS, Windows and even the web, all using the same API. So add this package to your project first using `flutter pub add geolocator` and then you can get the `Position` object as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/currentlocation_in_flutter/lib/main.dart (GetLocationExample)"?> -->
+```dart
+Future<Position> getLocation() async {
+  if (!await Geolocator.isLocationServiceEnabled()) {
+    return Future.error('Location services are disabled.');
+  }
+
+  var permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error('Denied forever');
+  }
+
+  return await Geolocator.getCurrentPosition();
+}
+```
+
+Once you have a `Future<Position>`, you can consume it in your Flutter widget using a `FutureBuilder` as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/currentlocation_in_flutter/lib/main.dart (GetLocationWidgetExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: FutureBuilder<Position>(
+          future: getLocation(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final position = snapshot.requireData;
+              final text =
+                  'Location: ${position.latitude}, ${position.longitude}';
+              return Center(
+                child: Text(
+                  text,
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else {
+              return const Center(
+                child: CupertinoActivityIndicator(),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
 ### How do I access the camera?
 
 Text
