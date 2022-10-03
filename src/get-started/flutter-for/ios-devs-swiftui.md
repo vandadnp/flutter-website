@@ -1766,7 +1766,62 @@ class _HomePageState extends State<HomePage> {
 
 ### How do I access GPS coordinates?
 
-Text
+In SwiftUI, you can use the `CLLocationManager` class in order to access the user's location. You will need to import `CoreLocation` to use the location manager, and optionally `CoreLocationUI` if you want to display an instance of the `LocationButton` class. Your location manager would probably look like this:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/currentlocation_in_swiftui/currentlocation_in_swiftui/ContentView.swift (LocationManagerExample)"?> -->
+```swift
+class Manager: NSObject, ObservableObject, CLLocationManagerDelegate {
+  let manager = CLLocationManager()
+  
+  @Published var location: CLLocationCoordinate2D?
+  
+  override init() {
+    super.init()
+    self.manager.delegate = self
+  }
+  
+  func askForLocation() {
+    self.manager.requestLocation()
+  }
+  
+  func locationManager(
+    _ manager: CLLocationManager,
+    didUpdateLocations locations: [CLLocation]
+  ) {
+    self.location = locations
+      .first?
+      .coordinate
+  }
+  
+}
+extension CLLocationCoordinate2D: CustomStringConvertible {
+  public var description: String {
+    "Latitude: \(self.latitude), Longitude: \(self.longitude)"
+  }
+}
+```
+
+Now that we have an `ObservableObject` with a published property, we can go ahead and consume it in our view as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/currentlocation_in_swiftui/currentlocation_in_swiftui/ContentView.swift (GetUserLocationExample)"?> -->
+```swift
+import CoreLocation
+import CoreLocationUI
+
+struct ContentView: View {
+  @StateObject var manager = Manager()
+  var body: some View {
+    VStack {
+      if let location = manager.location {
+        Text("Your location is \(location.description)")
+      }
+      LocationButton {
+        self.manager.askForLocation()
+      }
+    }
+  }
+}
+```
 
 ### How do I access the camera?
 
