@@ -1626,7 +1626,143 @@ When developing applications, you'll most likely need to interact with *some* ha
 
 ### How do I access user photos?
 
-Text
+In SwiftUI, in order to access user photos, you'll need to work with the `PhotosUI` framework by using `import PhotosUI`. After that, you'll need to create a bridge between vanilla Swift code and your SwiftUI code. The vanilla Swift code would access the photo album, and exposes the selected image using a binding, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/photopicker_in_swiftui/photopicker_in_swiftui/ContentView.swift (PhotoPickerExample)"?> -->
+```swift
+struct PhotoPicker: UIViewControllerRepresentable {
+  
+  let conf: PHPickerConfiguration
+  @Binding var isPresented: Bool
+  @Binding var image: UIImage?
+  
+  func makeUIViewController(
+    context: Context
+  ) -> UIViewController {
+    let controller = PHPickerViewController(
+      configuration: conf
+    )
+    controller.delegate = context.coordinator
+    return controller
+  }
+  
+  func updateUIViewController(
+    _ uiViewController: UIViewController,
+    context: Context
+  ) {
+    // empty for now
+  }
+  
+  func makeCoordinator() -> Coordinator {
+    Coordinator(self)
+  }
+  
+  class Coordinator: PHPickerViewControllerDelegate {
+    private let parent: PhotoPicker
+    
+    init(
+      _ parent: PhotoPicker
+    ) {
+      self.parent = parent
+    }
+    
+    func picker(
+      _ picker: PHPickerViewController,
+      didFinishPicking results: [PHPickerResult]
+    ) {
+      self.parent.isPresented = false
+      guard let provider = results.first?.itemProvider else {
+        return
+      }
+      if provider.canLoadObject(ofClass: UIImage.self) {
+        provider.loadObject(ofClass: UIImage.self) { image, _ in
+          self.parent.image = image as? UIImage
+        }
+      }
+    }
+  }
+  
+}
+```
+
+Once you have the picker, you can use it in your SwiftUI view using the required bindings:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/photopicker_in_swiftui/photopicker_in_swiftui/ContentView.swift (PhotoPickerViewExample)"?> -->
+```swift
+import PhotosUI
+
+struct ContentView: View {
+  
+  @State private var isPresented = false
+  @State private var image: UIImage?
+  
+  var body: some View {
+    VStack {
+      Button("Display photo picker") {
+        isPresented.toggle()
+      }.sheet(isPresented: $isPresented) {
+        let conf = PHPickerConfiguration(
+          photoLibrary: PHPhotoLibrary.shared()
+        )
+        PhotoPicker(
+          conf: conf,
+          isPresented: $isPresented,
+          image: $image
+        )
+      }
+      if image != nil {
+        Image(uiImage: image!)
+          .resizable()
+          .frame(maxWidth: 200, maxHeight: 200)
+      }
+    }
+  }
+}
+```
+
+In Flutter, to access the photo library, you'll need to use the [image_picker](https://pub.dev/packages/image_picker) plugin. This package works on iOS, Android and the web so the Flutter code you'll write to access a user's gallery photos will work on all 3 aforementioned platforms. The `image_picker` package is really easy to work with. All you have to do is to call the `pickImage()` function of the `ImagePicker` class and `await` on its results, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/photopicker_in_flutter/lib/main.dart (PhotoPickerExample)"?> -->
+```dart
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _picker = ImagePicker();
+  Image? image;
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Column(
+          children: [
+            CupertinoButton(
+              onPressed: () async {
+                final result =
+                    await _picker.pickImage(source: ImageSource.gallery);
+                if (result != null) {
+                  final path = result.path;
+                  final file = File(path);
+                  // convert file to Image
+                  setState(() {
+                    image = Image.file(file);
+                  });
+                }
+              },
+              child: const Text('Pick Image'),
+            ),
+            if (image != null) image!,
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
 
 ### How do I access GPS coordinates?
 
