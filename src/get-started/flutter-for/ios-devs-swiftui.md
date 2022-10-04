@@ -11,16 +11,16 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
   - [UI Basics](#ui-basics)
     - [Views vs. Widgets](#views-vs-widgets)
-    - [Displaying Static Text](#displaying-static-text)
-    - [Adding Buttons](#adding-buttons)
-    - [Aligning components horizontally](#aligning-components-horizontally)
-    - [Aligning components vertically](#aligning-components-vertically)
-    - [Displaying a list view](#displaying-a-list-view)
-    - [Displaying a grid](#displaying-a-grid)
-    - [Creating a Scroll View](#creating-a-scroll-view)
+    - [How do I display static text?](#how-do-i-display-static-text)
+    - [How do I create and use buttons?](#how-do-i-create-and-use-buttons)
+    - [How do I align components horizontally?](#how-do-i-align-components-horizontally)
+    - [How do I align components vertically?](#how-do-i-align-components-vertically)
+    - [How do I display a list view?](#how-do-i-display-a-list-view)
+    - [How do I display a grid?](#how-do-i-display-a-grid)
+    - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
   - [Navigation](#navigation)
     - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
-    - [Manually Pop Back](#manually-pop-back)
+    - [How do I manually pop back in my navigation?](#how-do-i-manually-pop-back-in-my-navigation)
   - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
     - [How do I react to an asynchronous result?](#how-do-i-react-to-an-asynchronous-result)
     - [How do I react to continuous stream of data?](#how-do-i-react-to-continuous-stream-of-data)
@@ -53,7 +53,7 @@ In SwiftUI, you use views to represent parts of your app's UI, and you can provi
 
 <!-- TO DO: in general, is it helpful to mention that Flutter tends to be more verbose, but perhaps offers more options / flexibility? -->
 
-### Displaying Static Text
+### How do I display static text?
 
 As mentioned above, with SwiftUI most of what you create in the UI is done using view objects. These can act as containers, with each view having a series of subviews, that you specify declaratively in your Swift code. The example below will display a simple `"Hello, World!"` message to the center of the screen. 
 
@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
 
 One thing to notice here is the use of the `Center` widget. In SwiftUI, a view's contents are by default rendered in its center but in Flutter that is not always the case. In the example, the `HomePage` widget uses the `Scaffold` widget. `Scaffold` implements the basic Material Design visual layout structure, so  you can easily start building a beautiful app.  However, `Scaffold` does not render its `body` widget at the center of the screen. So, to center the text, you have to wrap it with a `Center` widget. You can learn more about the different widgets and their default behaviors by looking through the [Widget Catalog]().
 
-### Adding Buttons
+### How do I create and use buttons?
 
 In SwiftUI, you  create a button using the `Button` struct as shown here:
 
@@ -135,7 +135,7 @@ In SwiftUI if you want a button, then you need to use the `Button` struct. But w
 
 The `TextButton` class comes from the *Material* package that was referenced above. A package is a set of source code files that are packaged together. Pacakges and Material design will be discussed in more depth later in the document. You can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
 
-### Aligning components horizontally
+### How do I align components horizontally?
 
 In SwiftUI, stack views play a big part in designing your layouts. That's why there are two separate structures that allow you to create stacks:
 
@@ -179,7 +179,7 @@ class HomePage extends StatelessWidget {
 
 When calling `HStack` in SwiftUI, the example is calling the initializer with predefined `alignment` and `spacing`, so the only thing left to do is to pass a pair of curly brackets as the view builder. In Flutter, the `Row` widget requires `children` and expects a `List<Widget>`. A `List` in Dart is the equivalent of `Array` in Swift.
 
-### Aligning components vertically
+### How do I align components vertically?
 
 `HStack` and `Row` are used in SwiftUI and Flutter respectively in order to arrange UI components horizontally. Similarly, you can use the `VStack` and `Column`, in order to arrange your components vertically.
 
@@ -218,7 +218,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-### Displaying a list view
+### How do I display a list view?
 
 In SwiftUI, the base component for displaying lists is `List`. In this example,  3 simple `Text` components are displayed as list-items inside the `List`:
 
@@ -323,7 +323,7 @@ Here are a few things to note about this example in Flutter:
 
 In this example a `ListTile` is returned for each item. The `ListTile` widget has some intrinsic properties like height and font-size that may be helpful in building a list. However, you're able to return almost any widget that represents your data, per index.
 
-### Displaying a grid
+### How do I display a grid?
 
 In SwiftUI, when constructing non-conditional grids, you would use `Grid` and `GridRow`. Each `GridRow` represents a list of views to be displayed in that row and the `Grid` renders all the rows together. Here is an example of how this can be done in SwiftUI:
 
@@ -387,7 +387,7 @@ The term *axis* is something that you'll come across often on your journey to le
 <!-- TO DO: Does this approach by Flutter offer more flexibility? -->
 
 
-### Creating a Scroll View
+### How do I create a scroll view?
 
 In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` struct. Say that you want to display a series of `User` struct instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
 
@@ -724,7 +724,7 @@ class DetailsPage extends StatelessWidget {
 }
 ```
 
-### Manually Pop Back
+### How do I manually pop back in my navigation?
 
 In SwiftUI, in situations where your view needs to perform a manual pop-back to the previous screen, you use the `dismiss` environment value as shown here. In this example, a new button, with the title of `"Pop back"`, has been added to the the `PersonView` struct. When the user taps on this button, they pop back to the previous screen:
 
