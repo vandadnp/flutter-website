@@ -2077,7 +2077,8 @@ struct ContentView: View {
 
 In Flutter, in order to utilize the operating system's key-value storage, you'll need to use the [shared_preferences](https://pub.dev/packages/shared_preferences) plugin. This plugin works on Linux, iOS, Windows, macOS, Web and Android all with the same source code that you'll write for your app. Here is an example of how you can achieve the same effect as in the SwiftUI code, but runs on all aforementioned platforms without modification to the code:
 
-```swift
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/appstorage_in_flutter/lib/main.dart (AppStorageExample)"?> -->
+```dart
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -2114,4 +2115,86 @@ class HomePage extends StatelessWidget {
 
 ### How do I access the accelerometer?
 
-Text
+In SwiftUI, to use the accelerometer data, you will need to use the `CoreMotion` framework and the `CMMotionManager` class that resides in this framework. You can first create an `ObservableObject` that is your motion manager and which collects your accelerometer data as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/accelerometer_in_swiftui/accelerometer_in_swiftui/ContentView.swift (AccelerometerManagerExample)"?> -->
+```swift
+class AccelerometerManager: ObservableObject {
+  
+  @Published var data: CMAcceleration = .init(
+    x: 0.0,
+    y: 0.0,
+    z: 0.0
+  )
+  
+  private var manager: CMMotionManager
+  
+  init() {
+    self.manager = CMMotionManager()
+    self.manager.accelerometerUpdateInterval = 1.0 / 60.0
+    self.manager.startAccelerometerUpdates(to: .main) { data, error in
+      guard error == nil else {
+        return
+      }
+      if let data {
+        self.data = data.acceleration
+      }
+    }
+  }
+}
+
+extension CMAcceleration: CustomStringConvertible {
+  public var description: String {
+    "x: \(x), y: \(y), z: \(z)"
+  }
+}
+```
+
+After we have this observable object, we can observe it in our view and display the published property called `data` as demonstrated here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/accelerometer_in_swiftui/accelerometer_in_swiftui/ContentView.swift (AccelerometerManagerExample)"?> -->
+```swift
+struct ContentView: View {
+  @ObservedObject private var manager = AccelerometerManager()
+  var body: some View {
+    Text(manager.data.description)
+  }
+}
+```
+
+In Flutter, to read accelerometer data, you can use the [sensors_plus](https://pub.dev/packages/sensors_plus) plugin by issuing `flutter pub add sensors_plus` in Terminal from the root folder of your project. Using this plugin you can achieve the same results as you did in your SwiftUI code, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/accelerometer_in_flutter/lib/main.dart (AccelerometerExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Center(
+          child: StreamBuilder<AccelerometerEvent>(
+            stream: accelerometerEvents,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                  'Accelerometer: ${snapshot.requireData.description}',
+                );
+              } else {
+                return const Text('Accelerometer: null');
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+extension Description on AccelerometerEvent {
+  String get description => 'x: ${x.toStringAsFixed(2)}, '
+      'y: ${y.toStringAsFixed(2)}, '
+      'z: ${z.toStringAsFixed(2)}';
+}
+```
