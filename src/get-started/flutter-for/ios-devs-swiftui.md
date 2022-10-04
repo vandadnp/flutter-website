@@ -10,20 +10,20 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
 
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
   - [UI Basics](#ui-basics)
-    - [Views vs. Widgets](#views-vs.-widgets)
-    - [How do I display static text?](#displaying-static-text)
-    - [How do I add buttons?](#adding-buttons)
-    - [How do I align components horizontally?](#algining-components-horizontally)
-    - [How do I align components vertically?](#algining-components-vertically)
-    - [How do I display a list view?](#displaying-a-list-view)
-    - [How do I display a grid?](#displaying-a-grid)
-    - [How do I create a scroll view?](#creating-a-scroll-view)
+    - [Views vs. Widgets](#views-vs-widgets)
+    - [Displaying Static Text](#displaying-static-text)
+    - [Adding Buttons](#adding-buttons)
+    - [Aligning components horizontally](#aligning-components-horizontally)
+    - [Aligning components vertically](#aligning-components-vertically)
+    - [Displaying a list view](#displaying-a-list-view)
+    - [Displaying a grid](#displaying-a-grid)
+    - [Creating a Scroll View](#creating-a-scroll-view)
   - [Navigation](#navigation)
-    - [How do I navigate between pages?](#navigating-between-pages)
-    - [How do I pop back manually?](#manually-pop-back)
+    - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
+    - [Manually Pop Back](#manually-pop-back)
   - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
-    - [How do I write asynchronous code?](#writing-asynchronous-code)
-    - [How do I produce streams of data asynchronously?](#produce-streams-of-data-asynchronously)
+    - [Writing asynchronous code](#writing-asynchronous-code)
+    - [How do I produce streams of data asynchronously?](#how-do-i-produce-streams-of-data-asynchronously)
   - [Themes, Styles and Media](#themes-styles-and-media)
     - [How do I change to dark mode?](#how-do-i-change-to-dark-mode)
     - [How do I style my texts?](#how-do-i-style-my-texts)
@@ -2058,7 +2058,59 @@ class HomePage extends StatelessWidget {
 
 ### How do I persist user settings?
 
-Text
+In SwiftUI in order to persist small pieces of data in your application, you would probably use the `@AppStorage` property wrapper. The main argument passed to this property wrapper is the key on which the given data has to be stored. You can optionally specifcy the `UserDefauts` onto which the data has to be stored as the second parameter of this property wrapper but that's quite rare to see. In this example we will create a text field and all text changes to this field will be stored inside our property marked as `@AppStorage`. The next time the user opens our app, the text field's text will be restored through the property wrapper:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/appstorage_in_swiftui/appstorage_in_swiftui/ContentView.swift (AppStorageExample)"?> -->
+```swift
+struct ContentView: View {
+  @AppStorage("username") private var username: String = ""
+  var body: some View {
+    VStack {
+      TextField(
+        "Enter your username here",
+        text: $username
+      )
+    }
+  }
+}
+```
+
+In Flutter, in order to utilize the operating system's key-value storage, you'll need to use the [shared_preferences](https://pub.dev/packages/shared_preferences) plugin. This plugin works on Linux, iOS, Windows, macOS, Web and Android all with the same source code that you'll write for your app. Here is an example of how you can achieve the same effect as in the SwiftUI code, but runs on all aforementioned platforms without modification to the code:
+
+```swift
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Center(
+          child: FutureBuilder<SharedPreferences>(
+            future: SharedPreferences.getInstance(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final pref = snapshot.requireData;
+                return CupertinoTextField(
+                  placeholder: 'Enter your username here',
+                  controller: TextEditingController(
+                    text: pref.getString('username') ?? '',
+                  ),
+                  onChanged: (value) {
+                    pref.setString('username', value);
+                  },
+                );
+              } else {
+                return const CupertinoActivityIndicator();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
 
 ### How do I access the accelerometer?
 
