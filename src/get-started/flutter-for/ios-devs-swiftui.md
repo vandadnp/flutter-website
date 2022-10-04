@@ -22,8 +22,8 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
     - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
     - [Manually Pop Back](#manually-pop-back)
   - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
-    - [Writing asynchronous code](#writing-asynchronous-code)
-    - [How do I produce streams of data asynchronously?](#how-do-i-produce-streams-of-data-asynchronously)
+    - [How do I react to an asynchronous result?](#how-do-i-react-to-an-asynchronous-result)
+    - [How do I react to continuous stream of data?](#how-do-i-react-to-continuous-stream-of-data)
   - [Themes, Styles and Media](#themes-styles-and-media)
     - [How do I change to dark mode?](#how-do-i-change-to-dark-mode)
     - [How do I style my texts?](#how-do-i-style-my-texts)
@@ -805,7 +805,7 @@ Dart has a single-threaded execution model, with support for `Isolate`s (a way t
 
 Dart's single-threaded model doesn't mean you are required to run everything as a blocking operation that causes the UI to freeze. Instead, use the asynchronous facilities that the Dart language provides, such as `async`/`await`, to perform asynchronous work.
 
-### Writing asynchronous code
+### How do I react to an asynchronous result?
 
 SwiftUI has support for asynchronous code using the `async` keyword. This keyword marks a function as performing asynchronous work and you can call these functions and wait until they return their results using the `await` keyword. You can use the `await` keyword while inside a `Task`. In Flutter, with Dart as the language behind it, you can also use `async` and `await` but you don't have to worry about using `@MainActor` - like you would with SwiftUI. In Swift, we have a more complicated concurrency and threading model where UI work can only be performed on the main/UI thread. With Flutter, using a single-threaded model, you can fetch your data using `await` and immediately consume the results in your UI.
 
@@ -942,7 +942,7 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-### How do I produce streams of data asynchronously?
+### How do I react to continuous stream of data?
 
 Text
 
