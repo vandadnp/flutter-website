@@ -996,7 +996,68 @@ class HomePage extends StatelessWidget {
 
 ### How do I react to continuous stream of data?
 
-Text
+In SwiftUI, if you have an observable object with published properties, any changes to those properties can update your UI as long as you are consuming those properties. In Flutter, to get continuous updates to your UI from changes to a source, you will need to use `Stream` as the source of your data and `StreamBuilder` as your consumer. The `Stream` in Flutter is like a `@Published` property in SwiftUI (you don't need an `ObservableObject` in Flutter) and the `StreamBuilder` in Flutter has no real equivalent in SwiftUI. SwiftUI takes care of updates to your published properties automatically. 
+
+Let's say that you want to get the current date and time and update your UI every second using a timer. In SwiftUI, you can use the `Timer.publish()` function that gives you a publisher using the `Combine` framework which you can then *receive* on a UI component such as a `Text` and update your `@State` variables accordingly as demonstrated here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/streamofdata_in_swiftui/streamofdata_in_swiftui/ContentView.swift (ContentView)"?> -->
+```swift
+import SwiftUI
+import Combine
+
+struct ContentView: View {
+  @State private var date = Date.now
+  
+  private let timer = Timer.publish(
+    every: 1.0,
+    on: .main,
+    in: .common
+  ).autoconnect()
+  
+  var body: some View {
+    Text(date.description)
+      .onReceive(timer) { date in
+        self.date = date
+      }
+  }
+}
+```
+
+Where SwiftUI together with Combine becomes a full reactive solution, Flutter has all the components required to build a reactive app built-in, using `Stream`, `StreamController`, `StreamBuilder`, `Future` and `FutureBuilder` and many more built-in classes that deal with asynchronous programming. To achieve the same result in Flutter as our SwiftUI code mentioned previously, we can create a *periodic* stream and consume that stream in our widget as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/streamofdata_in_flutter/lib/main.dart (TimerExample)"?> -->
+```dart
+Stream<DateTime> dateTime() => Stream.periodic(
+      const Duration(seconds: 1),
+      (int count) => DateTime.now(),
+    );
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Center(
+          child: StreamBuilder<DateTime>(
+            stream: dateTime(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(
+                  snapshot.requireData.toIso8601String(),
+                );
+              } else {
+                return const CupertinoActivityIndicator();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
 
 ## Themes, Styles and Media
 
