@@ -21,6 +21,7 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
   - [Navigation](#navigation)
     - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
     - [How do I manually pop back in my navigation?](#how-do-i-manually-pop-back-in-my-navigation)
+    - [How do I navigate to another app?](#how-do-i-navigate-to-another-app)
   - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
     - [How do I react to an asynchronous result?](#how-do-i-react-to-an-asynchronous-result)
     - [How do I react to continuous stream of data?](#how-do-i-react-to-continuous-stream-of-data)
@@ -791,6 +792,57 @@ class DetailsPage extends StatelessWidget {
                 child: const Text('Pop back'),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### How do I navigate to another app?
+
+In SwiftUI, in order to open a URL to another application, you can use the `openURL` environment variable marked as `@Environment(\.openURL)`, as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/openapp_in_swiftui/openapp_in_swiftui/ContentView.swift (OpenAppExample)"?> -->
+```swift
+struct ContentView: View {
+  @Environment(\.openURL) private var openUrl
+  var body: some View {
+    Button("Open website") {
+      openUrl(
+        URL(
+          string: "https://google.com"
+        )!
+      )
+    }
+  }
+}
+```
+
+You can pass any `URL` instance to this environment variable. As long as the system can handle it, it will open the application that is registered as responsible for handling such URLs.
+
+In Flutter, to achieve the same results as in SwiftUI, you need to use the [url_launcher](https://pub.dev/packages/url_launcher) plugin. This plugin works not only on iOS, but also on Android, Linux, macOS, Web and Windows using the same codebase. Add it to your Flutter project by issuing the `flutter pub add url_launcher` command in Terminal at the root folder of your Flutter project and use it as shown here:
+
+<!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/popback_in_flutter/lib/main.dart (OpenAppExample)"?> -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      child: SafeArea(
+        child: Center(
+          child: CupertinoButton(
+            onPressed: () async {
+              await launchUrl(
+                Uri.parse('https://google.com'),
+              );
+            },
+            child: const Text(
+              'Open website',
+            ),
           ),
         ),
       ),
