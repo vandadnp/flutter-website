@@ -10,19 +10,20 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
 
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
   - [UI Basics](#ui-basics)
-    - [How do I display static text?](#how-do-i-display-static-text)
-    - [How do I add buttons?](#how-do-i-add-buttons)
-    - [How do I align components horizontally?](#how-do-i-align-components-horizontally)
-    - [How do I align components vertically?](#how-do-i-align-components-vertically)
-    - [How do I display a list view?](#how-do-i-display-a-list-view)
-    - [How do I display a grid?](#how-do-i-display-a-grid)
-    - [How do I create a scroll view?](#how-do-i-create-a-scroll-view)
+    - [Views vs. Widgets](#views-vs.-widgets)
+    - [How do I display static text?](#displaying-static-text)
+    - [How do I add buttons?](#adding-buttons)
+    - [How do I align components horizontally?](#algining-components-horizontally)
+    - [How do I align components vertically?](#algining-components-vertically)
+    - [How do I display a list view?](#displaying-a-list-view)
+    - [How do I display a grid?](#displaying-a-grid)
+    - [How do I create a scroll view?](#creating-a-scroll-view)
   - [Navigation](#navigation)
-    - [How do I navigate between pages?](#how-do-i-navigate-between-pages)
-    - [How do I pop back manually?](#how-do-i-pop-back-manually)
+    - [How do I navigate between pages?](#navigating-between-pages)
+    - [How do I pop back manually?](#manually-pop-back)
   - [Threading and Asynchronous Programming](#threading-and-asynchronous-programming)
-    - [How do I write asynchronous code?](#how-do-i-write-asynchronous-code)
-    - [How do I produce streams of data asynchronously?](#how-do-i-produce-streams-of-data-asynchronously)
+    - [How do I write asynchronous code?](#writing-asynchronous-code)
+    - [How do I produce streams of data asynchronously?](#produce-streams-of-data-asynchronously)
   - [Themes, Styles and Media](#themes-styles-and-media)
     - [How do I change to dark mode?](#how-do-i-change-to-dark-mode)
     - [How do I style my texts?](#how-do-i-style-my-texts)
@@ -44,11 +45,17 @@ Flutter is Google's modern UI framework; a declarative way of writing applicatio
 
 ## UI Basics
 
-In this section of the document we will discuss basic UI components and compare SwiftUI with Flutter. We will learn how to display static text, create buttons and react to their on-press events, display lists and grids and much more.
+This section will cover how basic UI components in Flutter compare to those in SwiftUI. You will learn how to display static text, create buttons and react to their on-press events, display lists, grids and more.
 
-### How do I display static text?
+### Views vs. Widgets
 
-In SwiftUI, we work with views and each view can have a series of subviews, that you declaratively specify in your Swift code. The example below will display a simple `"Hello, World!"` message to the center of the screen:
+In SwiftUI, you use views to represent parts of your app's UI, and you can provide modifiers that you use to configure views. Flutter is similar in that it uses widgets to represent parts of your app's UI. Because SwiftUI and Flutter are both declarative, views and widgets simply describe how the UI should look and what it should do. Additionally, both views and widgets are immutable, meaning they only exist until they need to be changed. However, there are a few differences. For one, Flutter is designed to use compositiion rather than inhieritance. So instead of having every widget inherit from a base class with all the necessary properties, Flutter uses individual classes. This means that things that may normall be represented as modifiers in SwiftUI will be represented as separate widgets in Flutter. You'll see this in the examples shown below. 
+
+<!-- TO DO: in general, is it helpful to mention that Flutter tends to be more verbose, but perhaps offers more options / flexibility? -->
+
+### Displaying Static Text
+
+As mentioned above, with SwiftUI most of what you create in the UI is done using view objects. These can act as containers, with each view having a series of subviews, that you specify declaratively in your Swift code. The example below will display a simple `"Hello, World!"` message to the center of the screen. 
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/rendering_text_swiftui/rendering_text_swiftui/ContentView.swift (SimpleText)"?> -->
 ```swift
@@ -59,7 +66,7 @@ struct ContentView: View {
 }
 ```
 
-Unsurprisingly, Flutter offers the ability to display static text on the screen using its `Text` widget. We will talk more and more about widgets as we go on but for now, it's enough to know that a widget is very similar to a SwiftUI view. Let's see the same example, but in Flutter:
+Flutter offers the ability to display static text on the screen using its `Text` widget. The example below shows the same `"Hello, World!"`, but in Flutter:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/rendering_text_flutter/lib/main.dart (SimpleText)"?> -->
 ```dart
@@ -79,11 +86,11 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-One thing that you need to notice here is the use of the `Center` widget. In SwiftUI, a view's contents are by default rendered in its center but in Flutter this is not the case in all widgets. In this case, our `HomePage` widget's main UI component is `Scaffold` and this widget has chosen to not render its `body` widget at the center of the screen, so if you want to center your text, you have to wrap it with a `Center` widget. We will soon talk more about nested widgets.
+One thing to notice here is the use of the `Center` widget. In SwiftUI, a view's contents are by default rendered in its center but in Flutter that is not always the case. In the example, the `HomePage` widget uses the `Scaffold` widget. `Scaffold` implements the basic Material Design visual layout structure, so  you can easily start building a beautiful app.  However, `Scaffold` does not render its `body` widget at the center of the screen. So, to center the text, you have to wrap it with a `Center` widget. You can learn more about the different widgets and their default behaviors by looking through the [Widget Catalog]().
 
-### How do I add buttons?
+### Adding Buttons
 
-In SwiftUI, you would create a button using the `Button` struct as shown here:
+In SwiftUI, you  create a button using the `Button` struct as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/rendering_button_swiftui/rendering_button_swiftui/ContentView.swift (SimpleButton)"?> -->
 ```swift
@@ -97,7 +104,7 @@ struct ContentView: View {
 }
 ```
 
-The `Button` struct in SwiftUI is constructed using an initializer, and various parameters that the initializer might require. In this case, we are using the initializer that takes in a `titleKey` parameter of type `LocalizedStringKey` and an action of type `@escaping () -> Void`.
+The `Button` struct in SwiftUI is constructed using an initializer, and various parameters that the initializer might require. In this case, the initializer  takes in a `titleKey` parameter of type `LocalizedStringKey` and an action of type `@escaping () -> Void`.
 
 In Flutter, to achieve the same results, you *can* use the `TextButton` class as shown here:
 
@@ -124,9 +131,11 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-One big difference here beteween native iOS development with SwiftUI and Flutter is that in SwiftUI, if you want a button, then you need to use the `Button` struct. But Flutter, being a multi-platform app development framework, you have access to variety of buttons that have pre-defined styles. The `TextButton` class comes from the *Material* package. A package is a set of source code files that are, well, packaged together. We will talk more about packages and Material soon but for now, if you're curious, you can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
+In SwiftUI if you want a button, then you need to use the `Button` struct. But with Flutter being a multi-platform framework, you have access to variety of buttons with pre-defined styles.
 
-### How do I align components horizontally?
+The `TextButton` class comes from the *Material* package that was referenced above. A package is a set of source code files that are packaged together. Pacakges and Material design will be discussed in more depth later in the document. You can read more about various widgets in the Material package by following [this link](https://docs.flutter.dev/development/ui/widgets/material).
+
+### Aligning components horizontally
 
 In SwiftUI, stack views play a big part in designing your layouts. That's why there are two separate structures that allow you to create stacks:
 
@@ -147,7 +156,7 @@ struct ContentView: View {
 }
 ```
 
-The equivalent of `HStack` in Flutter is `Row`. A row is a UI component who, as its name implies, lays out its *children* horizontally, in a row! Let's write the same code now in Flutter:
+The equivalent of `HStack` in Flutter is `Row`. A row is a widget who, as its name implies, lays out its *children* horizontally, in a row. 
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/hstack_in_flutter/lib/main.dart (SimpleRow)"?> -->
 ```dart
@@ -168,13 +177,13 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-The initialization of `HStack` on SwiftUI starts with a curly brackets pair to create a closure as the view builder but we're still calling the initializer of HStack with predefined `alignment` and `spacing`, so the only thing left for us to do is to pass a pair of curly brackets as the view builder. In Flutter, the parameter that expects the children is called `children` and expects a `List<Widget>`. A `List` in Dart is the equivalent of `Array` in Swift.
+When calling `HStack` in SwiftUI, the example is calling the initializer with predefined `alignment` and `spacing`, so the only thing left to do is to pass a pair of curly brackets as the view builder. In Flutter, the `Row` widget requires `children` and expects a `List<Widget>`. A `List` in Dart is the equivalent of `Array` in Swift.
 
-### How do I align components vertically?
+### Aligning components vertically
 
-`HStack` and `Row` are used in SwiftUI and Flutter respectively in order to arrange UI components horizontally. Similarly, you can use the `VStack` and, you guessed it, `Column`, in order to arrange your components vertically in SwiftUI and Flutter.
+`HStack` and `Row` are used in SwiftUI and Flutter respectively in order to arrange UI components horizontally. Similarly, you can use the `VStack` and `Column`, in order to arrange your components vertically.
 
-Let's see how you would go about doing the same example as before, but this time arranging the components vertically:
+The example below builds on the one above, but this time arranging the components vertically:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/vstack_in_swiftui/vstack_in_swiftui/ContentView.swift (SimpleVStack)"?> -->
 ```swift
@@ -188,7 +197,7 @@ struct ContentView: View {
 }
 ```
 
-The only thing that changed really between this example and the previous was that `HStack` became `VStack`. The same holds true in Flutter, all your Dart code stays the same, except for changing `Row` to `Column`, as shown here:
+The only thing that changed between this example and the previous was that `HStack` became `VStack`. The same holds true in Flutter, all your Dart code stays the same, except for changing `Row` to `Column`:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/vstack_in_flutter/lib/main.dart (SimpleColumn)"?> -->
 ```dart
@@ -209,9 +218,9 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-### How do I display a list view?
+### Displaying a list view
 
-In SwiftUI, the base component for displaying lists is `List`. Let's have a look at an example where we display 3 simple `Text` components as list-items inside our `List`:
+In SwiftUI, the base component for displaying lists is `List`. In this example,  3 simple `Text` components are displayed as list-items inside the `List`:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ContentView.swift (SimpleList)"?> -->
 ```swift
@@ -226,7 +235,7 @@ struct ContentView: View {
 }
 ```
 
-The initializer of the `List` struct in SwiftUI, like many other views that can have sub-views, has a view builder marked as `@ViewBuilder` which allows you to return a series of sub-views to be displayed as the content of that view, in this case, as contents of our list. This is more a convenience than it is the right way of creating lists in SwiftUI as the views that you insert for the contents of a `List` in SwiftUI cannot be more than 10 at a time. If you want to display more than 10 items at a time in a `List` in SwiftUI, you will most probably want to use the `ForEach` syntax or if your items are pure `String` instances, which ours are, you can get away by simply passing the strings to your `List` as shown here:
+The initializer of the `List` struct in SwiftUI, like many other views that can have sub-views, has a view builder marked as `@ViewBuilder` which allows you to return a series of sub-views to be displayed as the content of that view. In this case, as contents of the list. This way of creating lists in SwiftUI may be conveient, but if you have more than 10 items you will likely use `ForEach`, or if your items are `String` instances, you can simply pass the strings as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ListWithStrings.swift (ListWithStrings)"?> -->
 ```swift
@@ -244,7 +253,7 @@ struct ListWithStrings: View {
 }
 ```
 
-More often than not though, you will have a list of model objects you want to display to the user. In those cases, you will need to ensure that your model objects are identifiable using the `Identifiable` protocol as shown here:
+In many case, you have a list of model objects you want to display to the user. In those cases, you will need to ensure that your model objects are identifiable using the `Identifiable` protocol as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_swiftui/simple_list_in_swiftui/ListWithPersons.swift (ListWithPersons)"?> -->
 ```swift
@@ -277,7 +286,7 @@ struct ListWithPersons_Previews: PreviewProvider {
 }
 ```
 
-The way this example works is very similar to how Flutter prefers to build its list views although Flutter doesn't need the list items to be identifiable, unlike SwiftUI. All you have to do is to tell Flutter how many items you want to display and then build a `Widget` per item. Let's see how this looks like in Flutter using the `ListView` widget:
+This is very similar to how Flutter prefers to build its list views, although Flutter doesn't need the list items to be identifiable. All you have to do is to tell Flutter how many items you want to display and then build a widget per item. In the example below, `ListView` is used as the parent for all list items. It displays its children one after another in the scroll direction:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/simple_list_in_flutter/lib/main.dart (SimpleList)"?> -->
 ```dart
@@ -310,11 +319,11 @@ Here are a few things to note about this example in Flutter:
 
 * The `ListView` widget has a builder method, much like SwiftUI's `List` struct has a view builder that is a closure.
 * The `itemCount` parameter of the `ListView` in Flutter dictates how many items need to be displayed and rendered by the `ListView`.
-* The `itemBuilder` then gets called with an index from and including 0 up to and excluding the item count, and must return a `Widget` instance per item.
+* The `itemBuilder` then gets called with an index from, and including, 0 up to, and excluding, the item count - and must return a `Widget` instance per item.
 
-In this example we are returning a `ListTile` per item but you could directly return a `Text` per item as well. The `ListTile` widget has some intrinsic properties such as a specific height and font size that might be quite helpful in building a good-looking list view but you're more than welcome to return almost any other widget that represents your data, per index.
+In this example a `ListTile` is returned for each item. The `ListTile` widget has some intrinsic properties like height and font-size that may be helpful in building a list. However, you're able to return almost any widget that represents your data, per index.
 
-### How do I display a grid?
+### Displaying a grid
 
 In SwiftUI, when constructing non-conditional grids, you would use `Grid` and `GridRow`. Each `GridRow` represents a list of views to be displayed in that row and the `Grid` renders all the rows together. Here is an example of how this can be done in SwiftUI:
 
@@ -337,8 +346,7 @@ struct GridView: View {
   }
 }
 ```
-
-In order to display grids in Flutter, you would use the `GridView` widget. This widget has various constructors each of which achieves more or less the same goal but with different input parameters. In this example, to comply with the SwiftUI code as much as possible, we will use the `.builder()` initializer of our `GridView` widget in Flutter like so:
+To display grids in Flutter, you use the [`GridView`](https://api.flutter.dev/flutter/widgets/GridView-class.html) widget. This widget has various constructors, each of which achieves more or less the same goal but with different input parameters. This example uses the `.builder()` initializer:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/grid_in_flutter/lib/main.dart (GridExample)"?> -->
 ```dart
@@ -370,15 +378,18 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-The delegate of type `SliverGridDelegateWithFixedCrossAxisCount` determines various parameters using which the grid view will lay out its components such as `crossAxisCount` which is the number of items to display per row horizontally, and `mainAxisExtent` that dictates the number of pixels each row has to have.
+The delegate of type `SliverGridDelegateWithFixedCrossAxisCount` determines various parameters that the grid view will use to lay out its components, such as `crossAxisCount`, which is the number of items per row that will be displayed horizontally, and `mainAxisExtent`, which dictates the number of pixels each row must have.
 
-One important distinction between how SwiftUI's `Grid` and Flutter's `GridView` work is that in SwiftUI, you create your top-level `Grid` component and feed it with instances of `GridRow` but in Flutter, you create your `GridView` and then using the delegate you decide how the grid should lay out its components.
+One important distinction between SwiftUI's `Grid` and Flutter's `GridView` is that in SwiftUI the `Grid` view is fed with instances of `GridRow`, but in Flutter `GridView` uses the delegate to decide how the grid should lay out its components.
 
-The term *axis* is something that you'll come across more and more on your journey to learn Flutter so let's talk about it quickly: in a widget those main task is to lay out its components vertically, the main axis is `Axis.vertical` and the cross axis is `Axis.horizontal` so in case of our `GridView`, the main axis is vertical because that's what grids do, they lay out their rows vertically and the cross axis would be horizontal.
+The term *axis* is something that you'll come across often on your journey to learn Flutter. Within a widget, the  and cross axes depdend on the behvaior of that widget. For example, with `GridView`, the main axis is vertical because they lay out their rows vertically, and the cross axis would be horizontal. There are different properties that are associated with the axes which can be used to space out widgets, [you can learn more here](https://docs.flutter.dev/codelabs/layout-basics#axis-size-and-alignment). 
 
-### How do I create a scroll view?
+<!-- TO DO: Does this approach by Flutter offer more flexibility? -->
 
-In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` struct. Let's say that you want to display a series of `User` struct instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
+
+### Creating a Scroll View
+
+In SwiftUI, if you want to create custom scrolling components, you would use the `ScrollView` struct. Say that you want to display a series of `User` struct instances on the screen in a vertically scrollable fashion. Your SwiftUI implementation might look similar to this:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/scrollview_in_swiftui/scrollview_in_swiftui/ContentView.swift (ScrollViewExample)"?> -->
 ```swift
@@ -444,13 +455,13 @@ struct GridView_Previews: PreviewProvider {
 }
 ```
 
-In this example we have done things more like you would do it in a production-level application in that:
+In this example there are a few aspects that resemble production-level code:
 
-1. we have a `Person` struct that represents the data each person would carry, such as name and age.
+1. There is a `Person` struct that represents the data associated with each person, such as name and age.
 2. The `Person` struct conforms to the `Identifiable` protocol so that it can be used inside the `ForEach` view with ease.
-3. Each person is then rendered using a dedicated `PersonView` view struct for the sake of reusability.
+3. Each person is then rendered using a dedicated `PersonView` view for the sake of reusability.
 
-The closest equivalent of `ScrollView` in Flutter is `SingleChildScrollView`. We can use it to implement the same code as we just did in SwiftUI, as shown here:
+The closest equivalent of `ScrollView` in Flutter is `SingleChildScrollView`:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/scrollview_in_flutter/lib/main.dart (ScrollExample)"?> -->
 ```dart
@@ -465,7 +476,7 @@ class Person {
   });
 }
 
-// like in SwiftUI, we create a widget (view in SwiftUI),
+// create a widget (view in SwiftUI),
 // that represents each person visually on the screen
 class PersonView extends StatelessWidget {
   final Person person;
@@ -496,7 +507,7 @@ class PersonView extends StatelessWidget {
   }
 }
 
-// then we create a list of people
+// create a list of people
 final mockPersons = Iterable.generate(
   100,
   (index) => Person(
@@ -511,8 +522,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // and last but not least, we display the list
-      // of people on the screen inside a scroll viwe of type
+      // display the list of people on the screen 
+      // inside a scroll view of type
       // SingleChildScrollView (equivalent of ScrollView in SwiftUI)
       body: SingleChildScrollView(
         child: Column(
@@ -530,21 +541,24 @@ class HomePage extends StatelessWidget {
 }
 ```
 
-You can see a lot of similarities between the SwiftUI and the Flutter code for sure. Let's list them here:
+There are a lot of similarities between the SwiftUI and the Flutter code, for example:
 
 * Each person is an instance of the `Person` struct in SwiftUI and the `Person` class in Flutter.
 * The `PersonView` uses `Column` and `Row` in Flutter and `VStack` and `HStack` respectively in SwiftUI. We've talked about these before!
 * SwiftUI uses `ScrollView` while Flutter uses `SingleChildScrollView` to render a child that is layed out in a scrollable fashion on the screen.
 
-The major difference between `ScrollView` and `SingleChildScrollView` is that `ScrollView`'s initializer in SwiftUI has a `content` parameter which is a `@ViewBuidler` and can take up to 10 views directly to lay out though in our example the only view we are laying out is `ForEach` which in turn expands to displaying all instances of our `Person` struct. However, in Flutter, `SingleChildScrollView` has a single `child` parameter that takes just one `Widget` instance, in this case, our `Column` that roughly translates to the `ForEach` view in SwiftUI.
+The major difference between `ScrollView` and `SingleChildScrollView` is that `ScrollView`'s initializer in SwiftUI has a `content` parameter that is a `@ViewBuidler`. This can only directly take up to 10 views to lay out. However, `ForEach` can be used to display all instances - like in the example above, where it is used to display all instances of the `Person` struct. On the other hand, in Flutter, `SingleChildScrollView` has a single `child` parameter that takes just one `Widget` instance. In the example, this would be the `Column` widget, which that roughly translates to the `ForEach` view in SwiftUI.
+
+<!-- TO DO: How is wanting a scrollable view/widget different from a list, what are the cases where you would use one or the other? -->
+
 
 ## Navigation
 
-In this section of the document we will discuss navigation between pages of an app, the push and pop mechanism and more.
+In this section of the document will discuss navigation between pages of an app, the push and pop mechanism and more.
 
 ### How do I navigate between pages?
 
-iOS and macOS apps are usually built out of different "pages" or navigation routes. This stack of pages is called navigation stack in SwiftUI and is represented by the `NavigationStack` struct that itself contains a list of navigation links represented by the `NavigationLink` struct. Going back to our `Person` struct, let's create an application that displays a list of persons and tapping on each person display's the person's details in a new navigation link. The `Person` and `PersonView` structs will stay *almost* the same as they were in the previous examples; the only thing we will change is to make sure the `Person` struct conforms to the `Hashable` protocol because the `navigationDestination()` function of `View` in SwiftUI requires that. We will then use `NavigationStack` and `NavigationLink` as shown here to create a list and then a details page for each person:
+iOS and macOS apps are usually built out of different "pages" or navigation routes. This stack of pages is called a navigation stack in SwiftUI and is represented by the `NavigationStack` struct that contains a list of navigation links represented by the `NavigationLink` struct. Going back to the `Person` struct used in the previous example, the next example creates an application that displays a list of persons, and tapping on each person display's the person's details in a new navigation link. The `Person` and `PersonView` structs will stay almost the same as they were in the previous examples; the only thing that will change is the `Person` struct conforms to the `Hashable` protocol because that is what the `navigationDestination()` function of `View` in SwiftUI requires.  
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_swiftui/navigation_in_swiftui/ContentView.swift (NavigationExample)"?> -->
 ```swift
@@ -578,7 +592,9 @@ struct ContentView: View {
 }
 ```
 
-Navigation in Flutter is more decoupled from the declarative way of defining your user interface in that you need to define your navigation *routes* using a name of your choosing and after this definition, you can call upon your navigation routes using their names. The first part of this puzzle is to define the navigation routes and we do that when creating an instance of our application (the class instance that we pass to the `runApp()` function), as shown here:
+Navigation in Flutter is more decoupled from the declarative way of defining your user interface in that you need to define your navigation *routes* using a name of your choosing. After this definition, you can call upon your navigation routes using their names. The first part of this puzzle is to define the navigation routes and we do that when creating an instance of the application (the class instance that we pass to the `runApp()` function), as shown here:
+
+<!-- TO DO: What benefit does this approach to navigation offer? Making it easier to use in the navigator? -->
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_flutter/lib/main.dart (CupertinoAppExample)"?> -->
 ```dart
@@ -603,15 +619,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // the widget we return from here is a CupertinoApp
+    // the widgetreturned here is a CupertinoApp
     // that has the look and feel of an iOS app by default
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
       // then you define your routes using a Map where the keys
-      // to the map are the route names and the values are the
-      // a function each of which receives a BuildContext and returns
-      // a Widget
+      // to the map are the route names and the values are the function
+      // each of which receives a BuildContext and returns a Widget
       routes: {
         detailsPageRouteName: (context) => const DetailsPage(),
       },
@@ -619,8 +634,7 @@ class App extends StatelessWidget {
   }
 }
 ```
-
-After defining our single route as a parameter of the `CupertinoApp` class, we can go ahead and display the list of persons that we had mocked using the `mockPersons()` function. Once the user taps on any of the persons in the list, we will use the `pushNamed()` function of `Navigator` in order to push the details page for that person using the `detailsPageRouteName` constant route name we defined earlier:
+In the example, the [`CupertinoApp`](https://api.flutter.dev/flutter/cupertino/CupertinoApp-class.html) widget is used to build an application that uses Cupertino design. Cupertino widgets are styled to look like native iOS applications, and `CupertinoApp` wraps widgets to offer iOS specific defaults like fonts and scrolling physics. Here, the single route was used as a parameter of the `CupertinoApp` class.  Next, list of persons that was mocked using the `mockPersons()` function will need to be displayed. Once the user taps on any person,  the `pushNamed()` function  will be used to push the person's detail page to the from the `Navigator`  using the `detailsPageRouteName` that was defined earlier:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_flutter/lib/main.dart (HomePageWithListOfPeople)"?> -->
 ```dart
@@ -671,10 +685,10 @@ class HomePage extends StatelessWidget {
 
 As you can see, the `pushNamed()` function takes in two parameters:
 
-* `String routeName`: this is the name of the route that we should have already defined at our app-level.
-* `Object? arguments` an optional object to pass to the route as a parameter.
+* `String routeName`: this is the name of the route that should have already been defined at the app-level.
+* `Object? arguments`: an optional object to pass to the route as a parameter.
 
-After handling the tapping event, we can go ahead and program our `DetailsPage` widget who is responsible for displaying the details of each person that should be passed to it as a parameter. In SwiftUI, since the navigation is tightly connected to the structure of the UI using `NavigationStack` and `NavigationLink`, you pass `Hashable` parameters that have to be sent to the details page into the `NavigationLink` and when the `navigationDestination()` function is called, you receive that `Hashable` object and can then directly instantiate your details page. In Flutter since the routes are defined at an app-level, where you have no idea of which object is selected or what object to pass to where, you need to dynamically pass these objects of type `Object?` to the route and at the receiving side, read them using `ModalRoute` as you can see here:
+After handling the tapping event, the next step is to define the `DetailsPage` widget that is responsible for displaying the details of each person. In SwiftUI, the navigation is tightly connected to the structure of the UI using `NavigationStack` and `NavigationLink`, so you pass `Hashable` parameters that have to be sent to the details page into the `NavigationLink`. When the `navigationDestination()` function is called, you receive that `Hashable` object and can then directly instantiate your details page. In Flutter the routes are defined at the app-level, where you don't know which object is selected or what object to pass to where. Instead, arguments need to be dynamically passed into the new route. The widget below extracts the arguments using `ModalRoute.of()`:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/navigation_in_flutter/lib/main.dart (DetailsPageExample)"?> -->
 ```dart
@@ -710,9 +724,9 @@ class DetailsPage extends StatelessWidget {
 }
 ```
 
-### How do I pop back manually?
+### Manually Pop Back
 
-In SwiftUI, In situations where your view needs to perform a manual pop-back to the previous screen, you should use the `dismiss` environment value as shown here. We have modified our `PersonView` struct from before and added a new button with the title of `"Pop back"` which the user can tap on in order to pop back to the previous screen:
+In SwiftUI, in situations where your view needs to perform a manual pop-back to the previous screen, you use the `dismiss` environment value as shown here. In this example, a new button, with the title of `"Pop back"`, has been added to the the `PersonView` struct. When the user taps on this button, they pop back to the previous screen:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/popback_in_swiftui/popback_in_swiftui/ContentView.swift (PopBackExample)"?> -->
 ```swift
@@ -791,16 +805,16 @@ Dart has a single-threaded execution model, with support for `Isolate`s (a way t
 
 Dart's single-threaded model doesn't mean you are required to run everything as a blocking operation that causes the UI to freeze. Instead, use the asynchronous facilities that the Dart language provides, such as `async`/`await`, to perform asynchronous work.
 
-### How do I write asynchronous code?
+### Writing asynchronous code
 
-SwiftUI has support for asynchronous code using the `async` keyword. This keyword marks a function as performing asynchronous work and you can call these functions and wait until they return their results using the `await` keyword. You can use the `await` keyword while inside a `Task`. In Flutter, with Dart as the language behind it, you can also use `async` and `await` but you don't have to worry about using `@MainActor` unlike SwiftUI. In Swift, we have a more complicated concurrency and threading model where UI work can only be performed on the main/UI thread. Flutter, using a single-threaded model, you can fetch your data using `await` and immediately consume its results in your UI.
+SwiftUI has support for asynchronous code using the `async` keyword. This keyword marks a function as performing asynchronous work and you can call these functions and wait until they return their results using the `await` keyword. You can use the `await` keyword while inside a `Task`. In Flutter, with Dart as the language behind it, you can also use `async` and `await` but you don't have to worry about using `@MainActor` - like you would with SwiftUI. In Swift, we have a more complicated concurrency and threading model where UI work can only be performed on the main/UI thread. With Flutter, using a single-threaded model, you can fetch your data using `await` and immediately consume the results in your UI.
 
-Let's say we want to write a function that fetches the weather asynchronously. In SwiftUI, you could go about doing this using a view model class that is marked as `@MainActor` and a `load()` function that internally calls an asynchronous function using `Task` or that the `load()` function is itself marked as `async`. Let's see an example of such a view model. First let's define our `Weather` enum:
+Say you want to write a function that fetches the weather asynchronously. In SwiftUI, you could do this using a view model class that is marked as `@MainActor`, and a `load()` function that internally calls an asynchronous function using `Task`, or have the `load()` function itself marked as `async`. Below is an example of this view model. The first step is to define the `Weather` enum:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_swiftui/async_in_swiftui/ContentView.swift (WeatherEnum)"?> -->
 ```swift
-// a 1 second delay which we will use
-// in our mocked-api-call in a moment
+// a 1 second delay is used
+// in the mocked-api-call in a moment
 extension UInt64 {
   static let oneSecond = UInt64(1_000_000_000)
 }
@@ -811,7 +825,7 @@ enum Weather: String {
 }
 ```
 
-After this, we will go about defining our view model and mark it as `ObservableObject` so that it can publish its `result` property of type `Weather?`:
+The next step is to define the view model and mark it as `ObservableObject` so that it can publish its `result` property of type `Weather?`:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_swiftui/async_in_swiftui/ContentView.swift (WeatherEnum)"?> -->
 ```swift
@@ -826,7 +840,7 @@ After this, we will go about defining our view model and mark it as `ObservableO
 }
 ```
 
-The `load()` async function is not marked as `throws` so it is not allowed to use the `try` syntax, rather it should use `try?`. In our view then we can go ahead and call the `load()` function of our view model and define our view model as a state object using `@StateObject`:
+Because the `load()` async function is not marked as `throws`, it must use the `try?` syntax.  Next, the view model is defined as a state object using `@StateObject`, and the `load()` function can be called by the view model:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_swiftui/async_in_swiftui/ContentView.swift (ContentView)"?> -->
 ```swift
@@ -844,11 +858,11 @@ struct ContentView: View {
 }
 ```
 
-Although we could have done all of this without a view model and with much less code, it's important to also show real-life examples and compare SwiftUI with Flutter in those cases too.
+Although this could have been done without a view model, and with much less code, the goal of this document is to compare SwiftUI with Flutter through real-life examples.
 
-Flutter does not have the reactive model that SwiftUI has with `@MainActor`, `@Published` and `ObservableObject`. Instead, Flutter uses a much simpler model of using `Future` for work that will be done, well, in the future and completes after producing a value (or completes without producing a value). Flutter also has support for `Stream`, which is a class similar to `Future`. Whereas `Future` optionally produces maximum of 1 value, `Stream` can produce more than 1 value before it completes. To display the results of a `Future` on screen we will use a `FutureBuilder` and to display the results of a `Stream` we need to use `StreamBuilder`. Both these *builder* classes are essentially widgets that can be displayed in your widget-tree.
+Flutter does not have the reactive model that SwiftUI has with `@MainActor`, `@Published` and `ObservableObject`. Instead, Flutter uses a much simpler model of using `Future` for work that will be done in the future, and completes after producing a value (or completes without producing a value). Flutter also has support for `Stream`, which is a class similar to `Future`. Whereas `Future` optionally produces maximum of 1 value, `Stream` can produce more than 1 value before it completes. To display the results of a `Future` on screen you use a `FutureBuilder`. To display the results of a `Stream` you use `StreamBuilder`. Both these *builder* classes are essentially widgets that can be displayed in the widget-tree.
 
-Let's start off by creating our `Weather` enum in Flutter:
+In this example, the first step is to create the `Weather` enum in Flutter:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (WeatherEnum)"?> -->
 ```dart
@@ -859,7 +873,7 @@ enum Weather {
 }
 ```
 
-Then we can create a simple view model similiar to that which we created in SwiftUI that fetches the weather for us. Since in Flutter, `ObservableObject` is simply represented with either a `Future` or `Stream`, we can go ahead and simply return a `Future<Weather>` from a function within our view model like so:
+Then a simple view model, similiar to that which was created in SwiftUI, is created to fetch the weather. In Flutter, `ObservableObject` is simply represented by either a `Future` or `Stream`, so you can simply return a `Future<Weather>` from a function within the view model:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (HomePageViewModel)"?> -->
 ```dart
@@ -873,7 +887,7 @@ class HomePageViewModel {
 }
 ```
 
-If you look at the `load()` function in our view model, you can see similarities to our SwiftUI code such as this: the `load()` function is marked as `async` because internally, it is using the `await` keyword. Note that Dart functions are marked with `async` only if they are using `await` inside them, but you can also write the same `load()` function without marking the function as `async`, as shown here:
+If you look at the `load()` function in the view model, you can see similarities to the SwiftUI code: the `load()` function is marked as `async` because internally, it is using the `await` keyword. Note that Dart functions are marked with `async` only if they are using `await` inside them, but you can also write the same `load()` function without marking the function as `async`, as shown here:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (HomePageViewModelWithoutAsync)"?> -->
 ```dart
@@ -886,11 +900,11 @@ class HomePageViewModel {
 }
 ```
 
-This example is using the `then()` function on `Future<T>` which synchronously maps a `Future`'s value into another value. It's similar to how Combine works with its `map()` function but that's outside the scope of this section of the document.
+This example is using the `then()` function on `Future<T>` which synchronously maps a `Future`'s value into another value. It's similar to how Combine works with its `map()` function, but that's outside the scope of this section of the document.
 
-Going back to our `load()` function marked as `async()`, you can also note that inside a function that is marked as `async`, you can simply use the `return` statement to synchronously return a value which then in turn will be placed inside the resulting `Future`. In other words, you don't have to create a `Future` instance manually inside functions that are marked as `async`. This is another similarity between our SwiftUI and Flutter code.
+Going back to `load()`, you can also note that inside a function that is marked as `async`, you can simply use the `return` statement to synchronously return a value that is placed inside the resulting `Future`. In other words, you don't have to create a `Future` instance manually inside functions that are marked as `async`. This is another similarity between SwiftUI and Flutter.
 
-Now that our view model is in place, we can start writing our view code that consumes the `Future` returned by the `load()` function. Since it's a `Future` that we want to consume, we need to use the `FutureBuilder` widget in order to display the resulting `Weather` to the user:
+Now that the view model is in place, the view code that consumes the `Future` returned by the `load()` function can be created. Because a `Future` is needed, the `FutureBuilder` widget can be used to display the resulting `Weather` to the user:
 
 <!-- <?code-excerpt "examples/get-started/flutter-for/ios_devs_swiftui/async_in_flutter/lib/main.dart (HomePage)"?> -->
 ```dart
