@@ -6,7 +6,7 @@
 
 This document is for iOS developers who are comfortable developing their apps using SwiftUI. We have a separate document for UIKit which you're welcome to check out if you're more comfortable with UIKit.
 
-Flutter is Google's modern UI framework; a declarative way of writing applications that run on multiple platforms, including iOS and Android. In this document, we will go through the similarities and differences between Flutter and SwiftUI and hopefully, by the end of it all, you will become more confident in your Flutter skills as a native iOS developer who uses SwiftUI.
+Flutter is Google's modern UI framework; a declarative way of writing applications that run on multiple platforms, including iOS, Android, macOS, Linux, Windows and even the web! In this document, we will go through the similarities and differences between Flutter and SwiftUI and hopefully, by the end of it all, you will become more confident in your Flutter skills as a native iOS developer who uses SwiftUI.
 
 - [Flutter for SwiftUI Developers](#flutter-for-swiftui-developers)
   - [UI Basics](#ui-basics)
