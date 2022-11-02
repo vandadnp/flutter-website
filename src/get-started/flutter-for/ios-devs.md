@@ -16,11 +16,13 @@ way to get started learning Flutter development.
   [Add Flutter to existing app][].
 {{site.alert.end}}
 
-Before diving into this doc, you might want to watch a
-15-minute video from the [Flutter Youtube channel][] about
-the Cupertino package.
+<!-- Add this blurb once published -->
+<!-- Flutter is a framework for building cross-platform applications
+that uses the Dart programming language. 
+To understand some differences between programming with Dart
+and programming with Swift, see [Learning Dart as a Swift Developer][] 
+and [Comparing Dart Concurrency with Swift][]. -->
 
-<iframe width="560" height="315" src="{{site.youtube-site}}/embed/3PdUaidHc-E?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 Your iOS knowledge and skill set
 are highly valuable when building with Flutter,
@@ -29,8 +31,8 @@ for numerous capabilities and configurations.
 Flutter is a new way to build UIs for mobile,
 but it has a plugin system to communicate
 with iOS (and Android) for non-UI tasks.
-If you're an expert in iOS development,
-you don't have to relearn everything to use Flutter.
+<!-- Add this sentence once published -->
+<!-- Learn more at [iOS and Apple hardware interactions with Flutter][] -->
 
 Flutter also already makes a number of adaptations
 in the framework for you when running on iOS.
@@ -38,6 +40,115 @@ For a list, see [Platform adaptations][].
 
 This document can be used as a cookbook by jumping around
 and finding questions that are most relevant to your needs.
+
+{% comment %} Nav tabs {% endcomment -%}
+<ul class="nav nav-tabs" id="ios=framework" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="swiftui-tab" href="#swiftui" role="tab" aria-controls="swiftui" aria-selected="true">SwiftUI</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="uikit-tab" href="#uikit" role="tab" aria-controls="uikit" aria-selected="false">UKKit</a>
+  </li>
+</ul>
+
+{% comment %} Tab panes {% endcomment -%}
+<div class="tab-content">
+<div class="tab-pane active" id="swiftui" role="tabpanel" aria-labelledby="swiftui-tab" markdown="1">
+
+<!-- Embed intro to iOS video when published -->
+
+## Overview
+
+This section gives an overview of the core similarities 
+and differences between SwiftUI and Flutter.
+
+
+### Views vs. widgets
+
+Flutter and SwiftUI are both [declarative frameworks][], 
+meaning the code simply describes how the UI should look 
+and what it should do. 
+
+In SwiftUI, you use **_views_** 
+to represent parts of your app's UI, 
+and you can provide modifiers that are used to configure those views. 
+
+<!-- TO DO: add photo -->
+
+Flutter is similar in that it uses **_widgets_** 
+to represent parts of your app's UI. Both views and widgets are immutable, 
+meaning they only exist until they need to be changed. 
+Additionally, both SwiftUI and Flutter are designed to use composition 
+rather than inheritance. However, Flutter uses individual Widget classes 
+for many aspects of the UI. This means that properties 
+that might normally be represented as modifiers in SwiftUI 
+are instead represented as separate widgets in Flutter. 
+
+<!-- TO DO: add photo -->
+
+In both SwiftUI and Flutter, 
+layouts are composed by nesting views or widgets, 
+respectively, within one another.
+
+### Layout process
+
+In SwiftUI, the layout process is composed of a few different steps:
+
+1. The parent view proposes some size to the child view.
+2. The child decides the size it requires by going through 
+this same process with its own list of children. 
+It passes down the proposed size and 
+asks its child what size it wishes to be. 
+It then returns the size it requires to its parent.
+3. The parent lays out the child, respecting the size that the child requested.
+
+Flutter follows a similar process, with a few notable differences:
+
+1. The parent widget passes constraints down to its children 
+(maximum height and width, and minimum height and width). 
+2. The child attempts to decide its size 
+by going through this same process with its own list of children. 
+It tells its child what its constraints are, 
+and asks it what size it wishes to be. 
+3. The parent lays out the child, ensuring that it’s within the original constraints.
+
+The main differences are that in Flutter the size can be asserted by 
+the parent widget, and overrule the child’s desired size. 
+Parents can force a child to be a specific size by using tight 
+constraints where the minimum height is equal to the maximum height, 
+or the minimum width is equal to the maximum width.
+
+In SwiftUI, views can choose to expand to the space that the parent 
+has said is available, or choose to be the size of its content. 
+Flutter widgets behave similarly. 
+However, parents can offer unbounded constraints, where one or both 
+of the maximum values is infinity. 
+In these cases, if the child is expanding, 
+you will get an overflow warning, as shown below:
+
+
+``` dart
+UnconstrainedBox(
+  child: Container(color: red, width: 4000, height: 50),
+)
+```
+
+<!-- TO DO: insert photo -->
+
+### Design system
+
+Because Flutter is multi-platform, your app doesn’t need to conform to a stock design system. 
+While many examples in the Flutter documentation feature Material widgets, 
+which leverage the [Material Design System](), you have a lot of options 
+for designing your Flutter app.  You can customize Material widgets, leverage 
+[widgets built by the community](), [build your own widgets](), or use the [Cupertino widgets]() that follow [Apple’s Human Interface Guidelines.]()
+
+<!-- TO DO: embed cupertino video -->
+
+
+
+
+<!-- UKkit ---- -->
 
 ## Views
 
