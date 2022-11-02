@@ -40,6 +40,7 @@ For a list, see [Platform adaptations][].
 
 This document can be used as a cookbook by jumping around
 and finding questions that are most relevant to your needs.
+<!-- TO DO: add a link about finding the full samples -->
 
 {% comment %} Nav tabs {% endcomment -%}
 <ul class="nav nav-tabs" id="ios=framework" role="tablist">
@@ -127,7 +128,7 @@ In these cases, if the child is expanding,
 you will get an overflow warning, as shown below:
 
 
-``` dart
+```dart
 UnconstrainedBox(
   child: Container(color: red, width: 4000, height: 50),
 )
@@ -141,14 +142,608 @@ Because Flutter is multi-platform, your app doesn’t need to conform to a stock
 While many examples in the Flutter documentation feature Material widgets, 
 which leverage the [Material Design System](), you have a lot of options 
 for designing your Flutter app.  You can customize Material widgets, leverage 
-[widgets built by the community](), [build your own widgets](), or use the [Cupertino widgets]() that follow [Apple’s Human Interface Guidelines.]()
+[widgets built by the community](), [build your own widgets](), 
+or use the [Cupertino widgets]() that follow [Apple’s Human Interface Guidelines.]()
 
 <!-- TO DO: embed cupertino video -->
+
+## UI Basics
+
+This section covers how basic UI components in Flutter compare to those in SwiftUI. 
+This includes how to start your app, display static text, 
+create buttons, react to on-press events, display lists, grids, and more.
+
+
+### Getting started
+
+Usually, when you implement your SwiftUI app, you begin with **App:**
+
+<!-- TO DO: add code except -->
+
+```swift
+struct FooApp: App {
+var body: some Scene {
+    WindowGroup { 
+        HomePage() 
+    }
+}
+}
+```
+
+The body is usually created in a struct that conforms to the **View** protocol as follows:
+<!-- TO DO: add code except -->
+
+```swift
+struct HomePage: View {
+  var body: some View {
+    Text("Hello, World!")
+  }
+}
+```
+
+
+In Flutter, to begin you pass in an instance of your app to the `runApp` function. 
+
+<!-- TO DO: add code except -->
+```dart
+void main() {
+  runApp(
+    // create an instance of our app
+    // and pass it to the runApp function
+    const App(),
+  );
+}
+```
+
+
+`App` is itself a widget, and the build method describes the part of the user interface it represents.
+It’s common to begin your app with a [`WidgetApp`][] class, usually [`MaterialApp`][] or [`CupertinoApp`][].
+
+
+<!-- TO DO: add code except -->
+```dart
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // the widget returned here is a CupertinoApp
+    // that has the look and feel of an iOS app by default
+    return CupertinoApp(
+      home: const HomePage(),
+    );
+  }
+}
+```
+
+For apps using Cupertino, the widget used in `home` likely begins with a [`CupertinoPageScaffold`][] class 
+that accepts a widget as its body:
+
+<!-- TO DO: add code except -->
+```dart
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text(
+          'Hello, World!',
+        ),
+      ),
+    );
+  }
+}
+```
+
+One thing to note is the use of the [`Center`][] widget. In SwiftUI, 
+a view's contents are rendered in its center by default, 
+but in Flutter that’s not always the case. In the example, 
+the `HomePage` widget uses the `Scaffold` widget. 
+[`Scaffold`][] implements the basic Material Design visual layout structure, 
+so you can easily start building a beautiful app.  
+However, `Scaffold` doesn’t render its `body` widget at the center of the screen. 
+So, to center the text, you have to wrap it with a `Center` widget. 
+You can learn more about the different widgets and their default behaviors 
+by looking through the [Widget catalog][].
+
+
+### Adding Buttons
+
+In SwiftUI, you create a button using the `Button` struct, as shown here:
+
+<!-- TO DO: add code except -->
+```swift
+    Button("Do something") {
+      // this closure gets called when your
+      // button is tapped
+    }
+```
+
+To achieve the same  you can use the `TextButton` class, as follows:
+
+<!-- TO DO: add code except -->
+```dart
+TextButton(
+          onPressed: () {
+            // this closure gets called when your button is tapped
+          },
+          child: const Text('Do something'),
+        )
+```
+
+In SwiftUI if you want a button, then you must use the `Button` struct. 
+But with Flutter you have access to a variety of buttons with predefined styles. 
+The `[TextButton`][] class comes from the Material library 
+that was previously referenced, and exhibits material styling.
+
+
+### Aligning components horizontally
+
+In SwiftUI, stack views play a big part in designing your layouts. 
+That's why there are two separate structures that allow you to create stacks:
+
+1. `HStack` for horizontal stack views
+
+2. `VStack` for vertical stack views
+
+The following SwiftUI view adds a globe image and a text to a horizontal stack view:
+
+<!-- TO DO: add code except -->
+```swift
+  HStack {
+    Image(systemName: "globe")
+    Text("Hello, world!")
+  }
+```
+
+The equivalent of `HStack` in Flutter is [`Row`][],
+which lays out its children horizontally:
+
+<!-- TO DO: add code except -->
+```dart
+Row(
+    children: const [
+      Icon(Icons.credit_card),
+      Text('Hello, world!'),
+    ],
+  ),
+```
+
+In Flutter, the `Row` widget explicitly requires the 
+`children` parameter, 
+and expects a `List<Widget>`.
+
+
+### Aligning components vertically
+
+The following example builds on the previous, 
+but this time arranging the components vertically using `VStack`:
+
+
+<!-- TO DO: add code except -->
+```swift
+    VStack {
+      Image(systemName: "globe")
+      Text("Hello, world!")
+    }
+```
+
+In Flutter– all your Dart code stays the same as the previous example, 
+except for changing `Row` to [`Column`][]:
+
+<!-- TO DO: add code except -->
+```dart
+Column(
+        children: const [
+          Icon(Icons.credit_card),
+          Text('Hello, world!'),
+        ],
+      ),
+```
+
+
+### Displaying a list view
+
+In SwiftUI, the base component for displaying lists is `List`. 
+Many times, you have a list of model objects you want to display to the user. 
+In those cases, you need to ensure that your model objects 
+are identifiable using the `Identifiable` protocol as follows:
+
+<!-- TO DO: add code excerpt -->
+```swift
+var persons = [
+  "Person 1",
+  "Person 2",
+  "Person 3",
+]
+
+struct ListWithPersons: View {
+  let persons: [Person]
+  var body: some View {
+    List {
+      ForEach(persons) { person in
+        Text(person)
+      }
+    }
+  }
+}
+```
+
+This is similar to how Flutter prefers to build its list widgets, 
+although Flutter doesn't need the list items to be identifiable. 
+All you have to do is specify the number of items to display and build a widget for each item.
+
+<!-- TO DO: add code excerpt -->
+```dart
+const items = [
+  'Person 1',
+  'Person 2',
+  'Person 3',
+];
+
+…
+
+ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(items[index]),
+          );
+        },
+      ),
+    );
+```
+
+There are a few things to note about this example in Flutter:
+
+* The `ListView` widget has a builder method, 
+this operates in a similar way 
+to the ForEach inside of SwiftUI's `List` struct
+
+* The `itemCount` parameter of the `ListView` 
+dictates how many items need to be displayed and 
+rendered by the `ListView`.
+
+* The `itemBuilder` then gets called with an index from 
+(and including) 0, up to (and excluding) the item 
+count—and must return a `Widget` instance per item.
+
+In this example, a `ListTile` is returned for each item. 
+The `ListTile` widget has some intrinsic properties 
+like height and font-size that might be helpful 
+in building a list. However, you're able to return 
+almost any widget that represents your data.
+
+
+### Displaying a grid
+
+In SwiftUI, when constructing non-conditional 
+grids, you use `Grid` with `GridRow`. 
+
+
+<!-- TO DO: add code excerpt -->
+```swift
+    Grid {
+      GridRow {
+        Text("Row 1")
+        Image(systemName: "square.and.arrow.down")
+        Image(systemName: "square.and.arrow.up")
+      }
+      GridRow {
+        Text("Row 2")
+        Image(systemName: "square.and.arrow.down")
+        Image(systemName: "square.and.arrow.up")
+      }
+    }
+```
+
+To display grids in Flutter, you use the `GridView` widget. 
+This widget has various constructors, 
+each of which achieves more or less the same goal 
+but with different input parameters. 
+This example uses the `.builder()` initializer:
+
+<!-- TO DO: add code excerpt -->
+```dart
+const widgets = [
+  Text('Row 1'),
+  Icon(Icons.download),
+  Icon(Icons.upload),
+  Text('Row 2'),
+  Icon(Icons.download),
+  Icon(Icons.upload),
+];
+… 
+GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisExtent: 40.0,
+        ),
+        itemCount: widgets.length,
+        itemBuilder: (context, index) => widgets[index],
+      ),
+    )
+```
+
+The `SliverGridDelegateWithFixedCrossAxisCount` 
+delegate determines various parameters that the grid  
+uses to lay out its components, 
+such as `crossAxisCount`, which is the number of items 
+per row that is displayed horizontally, and `mainAxisExtent`, 
+which dictates the number of pixels each row must have.
+
+One distinction between SwiftUI's `Grid` and Flutter's `GridView` 
+is that in SwiftUI the `Grid` is fed with instances of `GridRow`, 
+but in Flutter `GridView` uses the delegate to decide 
+how the grid should lay out its components.
+
+The term axis is something that you'll come across often 
+on your journey to learn Flutter. 
+Within a widget, the main and cross axes depend on 
+the behavior of that widget. 
+For example, with `GridView`, the main axis is vertical 
+because they lay out their rows vertically, 
+and the cross axis is therefore horizontal. 
+There are different properties that are associated 
+with the axes which can be used to space out widgets. 
+For more information, check out [Axis size and alignment][] 
+in [Basic Flutter layout concepts][].
+
+
+### Creating a scroll view
+
+In SwiftUI, to create custom scrolling components, 
+you would use `ScrollView`. 
+For example, to display a series of `User` 
+struct instances on the screen in a vertically scrollable fashion. 
+
+
+<!-- TO DO: add code excerpt -->
+```swift
+    ScrollView {
+      VStack(alignment: .leading) {
+        ForEach(persons) { person in
+          PersonView(person: person)
+        }
+      }
+    }
+```
+
+The closest equivalent of `ScrollView` in Flutter is [`SingleChildScrollView`]:
+
+<!-- TO DO: add code excerpt -->
+```dart
+SingleChildScrollView(
+        child: Column(
+          children: mockPersons
+              .map(
+                (person) => PersonView(
+                  person: person,
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+```
+
+### Responsive & adaptive design
+
+In SwiftUI, you often use `GeometryReader` to create relative view sizes. 
+For example by setting the _width _to `geometry.size.width` multiplied by 
+some factor, or using it as a breakpoint to change the design of your app. 
+Alternatively, you can use environments such as `horizontalSizeClass` 
+that tell you if the size class is `.regular` or `.compact`.
+
+In Flutter, you can take a similar approach 
+using the [`LayoutBuilder`] class to get the `BoxConstraints` object, 
+or the [`MediaQuer.of()`] in your build functions to get the size and 
+orientation of your current app. For more information, check out 
+[Creating responsive and adaptive apps][]. 
+
+
+### Managing state
+
+In SwiftUI, the `@State` property wrapper is used to represent the 
+internal state of a SwiftUI view, as follows: 
+
+<!-- TO DO: add code excerpt -->
+```swift
+struct ContentView: View {
+  @State private var counter = 0;
+  var body: some View {
+    VStack{
+      Button("+") { counter+=1 }
+      Text(String(counter))
+    }
+  }}
+```
+
+SwiftUI also has several options for more complex state management. 
+For example, the `ObservableObject` protocol. 
+
+Flutter manages local state using a [`StatefulWidget`][]. 
+A stateful widget is implemented by two classes: 
+a subclass of `StatefulWidget` 
+and a subclass of `State`, 
+with the state of the widget stored in the `State` object. 
+When a widget’s state changes, the state object calls `setState()`, 
+telling the framework to redraw the widget. 
+The following example shows components of a similar 
+counter app to the one created previously:
+
+<!-- TO DO: add code excerpt -->
+```dart
+class CounterWidget extends StatefulWidget {
+  const CounterWidget({super.key});	      
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('$_counter'),
+            TextButton(
+          onPressed: () => setState(() { _counter++; }),
+          child: Text("+"),
+        ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+For information on other ways to manage state, see [State management][].
+
+### Animations
+
+There are two main types of UI animations. Implicit, 
+which have a current and new value to animate to. And explicit, 
+which animate when explicity asked to.
+
+In SwiftUI implicit animations are handled by the `animate()` modifier, 
+as follows:
+
+<!-- TO DO: add code excerpt -->
+```swift
+Button(“Tap me!”){
+   angle += 45
+}
+.rotationEffect(.degrees(angle))
+.animation(.easeIn)
+```
+
+In Flutter, there are built-in widgets that make it easy to 
+implicitly animate commonly used widgets. These are named `AnimatedFoo`. 
+For example, to rotate a button you can use the 
+[`AnimatedRotation`][] class, which animates the 
+['Transform.rotate`][] widget.
+
+<!-- TO DO: add code excerpt -->
+```dart
+AnimatedRotation(
+  turns: turns,
+  curve: Curves.easeIn,
+  child: TextButton(
+   onPressed: () {
+     setState(() {
+       turns += .125;
+     });
+  }, child: Text('Tap me!')),
+  )
+```
+
+SwiftUI and Flutter take a similar approach, 
+where you can specify parameters like [duration][], and [curve][]. 
+If there's no built in widget for what you're trying to do, 
+you can use the [TweenAnimationBuilder][] to easily 
+compose an animated widget.
+
+When it comes to explicit animations, 
+SwiftUI uses the `withAnimation{}` closure. Flutter, 
+on the other hand, 
+has built in explicitly animated widgets called `FooTransition`. 
+For example, the [`RotationTransition`][] class. 
+If there's no built in widget for what you're trying to do,
+you can use an `AnimatedWidget` for a standalone widget, 
+or `AnimatedBuilder` in another widget’s build method
+
+To learn more about animations in Flutter, see [Flutter Animations][].
+
+### Drawing on the Screen
+
+On iOS, you use `CoreGraphics` to draw lines and shapes to the
+screen. Flutter has a different API based on the `Canvas` class,
+with two other classes that help you draw: [`CustomPaint`] and [`CustomPainter`],
+the latter of which implements your algorithm to draw to the canvas.
+
+
+<?code-excerpt "lib/canvas.dart"?>
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MaterialApp(home: DemoApp()));
+
+class DemoApp extends StatelessWidget {
+  const DemoApp({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Scaffold(body: Signature());
+}
+
+class Signature extends StatefulWidget {
+  const Signature({super.key});
+
+  @override
+  State<Signature> createState() => SignatureState();
+}
+
+class SignatureState extends State<Signature> {
+  List<Offset?> _points = <Offset?>[];
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onPanUpdate: (details) {
+        setState(() {
+          RenderBox? referenceBox = context.findRenderObject() as RenderBox;
+          Offset localPosition =
+              referenceBox.globalToLocal(details.globalPosition);
+          _points = List.from(_points)..add(localPosition);
+        });
+      },
+      onPanEnd: (details) => _points.add(null),
+      child: CustomPaint(
+        painter: SignaturePainter(_points),
+        size: Size.infinite,
+      ),
+    );
+  }
+}
+
+class SignaturePainter extends CustomPainter {
+  SignaturePainter(this.points);
+
+  final List<Offset?> points;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = Colors.black
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 5.0;
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i] != null && points[i + 1] != null) {
+        canvas.drawLine(points[i]!, points[i + 1]!, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(SignaturePainter oldDelegate) =>
+      oldDelegate.points != points;
+}
+```
+
+
+
 
 
 
 
 <!-- UKkit ---- -->
+<!-- To do: change ios to UIKit -->
 
 ## Views
 
