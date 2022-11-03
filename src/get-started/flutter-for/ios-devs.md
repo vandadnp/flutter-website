@@ -736,10 +736,186 @@ class SignaturePainter extends CustomPainter {
 }
 ```
 
+## Navigation
 
+This section of the document discusses navigation 
+between pages of an app, the push and pop mechanism, and more.
 
+### Navigating between pages
+iOS and macOS apps are usually built with different pages or navigation routes. 
+In SwiftUI, this stack of pages is represented by the `NavigationStack` struct,
+and contains `NavigationLink` structs. 
 
+The next example creates an application that displays a list of persons, 
+and tapping on each person display's the person's details in a new navigation link. 
 
+<!-- TO DO: add code excerpt -->
+```swift
+NavigationStack(path: $path) {
+      List {
+        ForEach(persons) { person in
+          NavigationLink(
+            person.name,
+            value: person
+          )
+        }
+      }
+      .navigationDestination(for: Person.self) { person in
+        PersonView(person: person)
+      }
+    }
+```
+
+In Flutter, small applications without complex deep linking can use [Navigator][] 
+with named routes, as shown below. After defining your navigation routes, 
+you can call upon your navigation routes using their names. 
+
+First, you name your define your routes in the class passed to the 
+`runApp()` function, in this case `App`:
+
+<!-- TO DO: add code excerpt -->
+```dart
+// define route name as a constant
+// so it is reusable
+const detailsPageRouteName = '/details';
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(),
+      // routes property defines the available named routes 
+      // and the widgets to build when navigating to those routes
+      routes: {
+        detailsPageRouteName: (context) => const DetailsPage(),
+      },
+    );
+  }
+}
+```
+The following sample generates a list of persons 
+mocked using `mockPersons()`.
+Once the user taps on any person, `pushNamed()` pushes the person's detail page 
+to the `Navigator`.
+
+<!-- TO DO: add code excerpt -->
+```swift
+ ListView.builder(
+    itemCount: mockPersons.length,
+    itemBuilder: (context, index) {
+      final person = mockPersons.elementAt(index);
+      final age = '${person.age} years old';
+      return ListTile(
+        title: Text(person.name),
+        subtitle: Text(age),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+        ),
+        onTap: () {
+          // when a ListTile that represents a person is
+          // tapped, the detailsPageRouteName route
+          // is pushed to the Navigator and 
+          // and the person instance is passed to the route
+          Navigator.of(context).pushNamed(
+            detailsPageRouteName,
+            arguments: person,
+          );
+        },
+      );
+```
+Next you'll define the `DetailsPage` widget responsible for 
+displaying the details of each person. In Flutter, arguments can be 
+dynamically passed into the widget, when navigating to the new route, 
+and extracted using `ModalRoute.of()`:
+
+<!-- TO DO: add code excerpt and test that the code change works-->
+```dart
+class DetailsPage extends StatelessWidget {
+  const DetailsPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // read the person instance from the arguments
+    final Person person = ModalRoute.of(
+      context,
+    )?.settings.arguments as Person;
+    // extract the age
+    final age = '${person.age} years old';
+    return 
+          // use a ListTile to display the person's
+          // details since it already has a good layout
+          ListTile(
+            title: Text(person.name),
+            subtitle: Text(age),
+    );
+  }
+}
+```
+
+For more advanced navigation and routing requirements, 
+you should use a routing package such as [go_router][]. 
+You can find more details at Navigation in Flutter.  
+
+### Manually pop back
+
+In SwiftUI, for situations where your view needs 
+to perform a manual pop-back to the previous screen, 
+you use the `dismiss` environment value as follows:
+
+<!-- TO DO: add code excerpt and test that the code change works-->
+```swift
+Button("Pop back") {
+        dismiss()
+      }
+```
+
+In Flutter, to achieve the same effect, you use the `pop()` 
+function of the `Navigator` class as follows:
+
+<!-- TO DO: add code excerpt and test that the code change works-->
+```dart
+ TextButton(
+    onPressed: () {
+      // this is the main code that allows the
+      // view to pop back to its presenter
+      Navigator.of(context).pop();
+    },
+    child: const Text('Pop back'),
+  ),
+```
+
+### Navigating to another app
+
+In SwiftUI, to open a URL to another application, you use the `openURL` environment 
+variable, as follows:
+
+```swift
+@Environment(\.openURL) private var openUrl
+
+ Button("Open website") {
+      openUrl(
+        URL(
+          string: "https://google.com"
+        )!
+      )
+    }
+```
+
+To achieve the same results in Flutter, you use the [url_launcher][] plugin. 
+
+<!-- TO DO: add code excerpt and test that the code change works-->
+```dart
+import url_launcher
+
+...
+CupertinoButton(
+  onPressed: () async {
+    await launchUrl(
+      Uri.parse('https://google.com'),
+    );
+  },
+```
 
 
 <!-- UKkit ---- -->
