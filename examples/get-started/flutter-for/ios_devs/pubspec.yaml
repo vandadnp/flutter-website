@@ -24,3 +24,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: BungeeSpice
+      fonts:
+        - asset: fonts/BungeeSpice-Regular.ttf
