@@ -222,18 +222,6 @@ It’s common to begin your app with a [`WidgetApp`][] class, like [`CupertinoAp
 
 <?code-excerpt "lib/get_started.dart (myapp)"?>
 ```dart
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // the widget returned here is a CupertinoApp
-    // that has the look and feel of an iOS app by default
-    return CupertinoApp(
-      home: const HomePage(),
-    );
-  }
-}
 ```
 
 The widget used in `home` might begin with the `Scaffold` class 
@@ -267,8 +255,6 @@ class HomePage extends StatelessWidget {
   }
 }
 ```
-
-Test out the complete example on DartPad: [Get Started Example][].
 
 One thing to note is the use of the [`Center`][] widget. In SwiftUI, 
 a view's contents are rendered in its center by default, 
@@ -515,7 +501,6 @@ like height and font-size that might be helpful
 in building a list. However, you're able to return 
 almost any widget that represents your data.
 
-Test out the complete example on DartPad: [List Example][].
 
 ### Displaying a grid
 
@@ -646,9 +631,6 @@ create the custom `PersonView` widget.
 ),
 ```
 
-Test out the complete example on DartPad: [Scroll Example][].
-
-
 ### Responsive & adaptive design
 
 In SwiftUI, you often use `GeometryReader` to create relative view sizes. 
@@ -737,7 +719,7 @@ class [!_MyHomePageState extends State<MyHomePage>!] {
 }
 ```
 
-Test the complete example on DartPad: [State Example][]. For information on other ways to manage state, see [State management][].
+For information on other ways to manage state, see [State management][].
 
 ### Animations
 
@@ -787,8 +769,6 @@ child: TextButton(
 }, child: Text('Tap me!')),
 )
 ```
-
-Test out the full example on DartPad: [Animation Example][].
 
 SwiftUI and Flutter take a similar approach, 
 where you can specify parameters like `duration`, and `curve`. 
