@@ -264,6 +264,18 @@ In SwiftUI, you create a button using the `Button` struct, as shown here:
 
 To achieve the same  you can use the `CupertinoButton` class, as follows:
 
+<nav class="navbar bg-primary">
+ <ul class="navbar-nav navbar-code ml-auto">
+  <li class="nav-item">
+    <button type="button" class="btn btn-navbar-code" href="#">Test in DartPad</button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="btn btn-navbar-code" href="#">View on Github</button>
+  </li>
+</ul>
+</nav>
+
+
 <?code-excerpt "lib/text_button.dart (textbutton)"?>
 ```dart
 CupertinoButton(
