@@ -12,7 +12,7 @@ then you can use this document as a
 way to get started learning Flutter development.
 
 {{site.alert.note}}
-  To integrate Flutter code into your iOS app, see
+  To integrate Flutter code into your existing iOS app, see
   [Add Flutter to existing app][].
 {{site.alert.end}}
 
@@ -25,7 +25,7 @@ and [Comparing Dart Concurrency with Swift][]. -->
 
 
 Your iOS knowledge and skill set
-are highly valuable when building with Flutter,
+are highly valuable when building with Flutter, 
 because Flutter relies on the mobile operating system
 for numerous capabilities and configurations.
 Flutter is a new way to build UIs for mobile,
@@ -40,7 +40,9 @@ For a list, see [Platform adaptations][].
 
 This document can be used as a cookbook by jumping around
 and finding questions that are most relevant to your needs.
-<!-- TO DO: add a link about finding the full samples -->
+Pieces of sample code are embedded within this document, 
+but the full working examples can be found in the 
+[Flutter Website Github Samples][]. 
 
 {% comment %} Nav tabs {% endcomment -%}
 <ul class="nav nav-tabs" id="ios=framework" role="tablist">
@@ -48,7 +50,7 @@ and finding questions that are most relevant to your needs.
     <a class="nav-link active" id="swiftui-tab" href="#swiftui" role="tab" aria-controls="swiftui" aria-selected="true">SwiftUI</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="uikit-tab" href="#uikit" role="tab" aria-controls="uikit" aria-selected="false">UKKit</a>
+    <a class="nav-link" id="uikit-tab" href="#uikit" role="tab" aria-controls="uikit" aria-selected="false">UIKit</a>
   </li>
 </ul>
 
@@ -66,7 +68,7 @@ and differences between SwiftUI and Flutter.
 
 ### Views vs. widgets
 
-Flutter and SwiftUI are both [declarative frameworks][], 
+Flutter and SwiftUI are both declarative frameworks, 
 meaning the code simply describes how the UI should look 
 and what it should do. 
 
@@ -74,18 +76,18 @@ In SwiftUI, you use **_views_**
 to represent parts of your app's UI, 
 and you can provide modifiers that are used to configure those views. 
 
-<!-- TO DO: add photo -->
+<img src="/assets/images/docs/get-started/ios/swiftui-modifiers.png" alt="SwiftUI Text view uses a padding modifier">
 
 Flutter is similar in that it uses **_widgets_** 
 to represent parts of your app's UI. Both views and widgets are immutable, 
 meaning they only exist until they need to be changed. 
 Additionally, both SwiftUI and Flutter are designed to use composition 
-rather than inheritance. However, Flutter uses individual Widget classes 
+rather than inheritance. However, Flutter uses individual widget classes 
 for many aspects of the UI. This means that properties 
 that might normally be represented as modifiers in SwiftUI 
 are instead represented as separate widgets in Flutter. 
 
-<!-- TO DO: add photo -->
+<img src="/assets/images/docs/get-started/ios/flutter-widgets.png" alt="Flutter Text Widget is encapsulated by a Padding widget">
 
 In both SwiftUI and Flutter, 
 layouts are composed by nesting views or widgets, 
@@ -134,18 +136,22 @@ UnconstrainedBox(
 )
 ```
 
-<!-- TO DO: insert photo -->
+<img src="/assets/images/docs/ui/layout/layout-14.png" alt="When parents pass unbounded constraints to children, and the children are expanding, then there is an overflow warning">
+
+For more information on how constraints work in Flutter, 
+see [Understanding constraints][]. 
+
 
 ### Design system
 
 Because Flutter is multi-platform, your app doesn’t need to conform to a stock design system. 
 While many examples in the Flutter documentation feature Material widgets, 
-which leverage the [Material Design System](), you have a lot of options 
+which leverage the [Material Design guidelines][], you have a lot of options 
 for designing your Flutter app.  You can customize Material widgets, leverage 
-[widgets built by the community](), [build your own widgets](), 
-or use the [Cupertino widgets]() that follow [Apple’s Human Interface Guidelines.]()
+widgets built by the community, build your own widgets, 
+or use the [Cupertino widgets][] that follow Apple’s Human Interface Guidelines.
 
-<!-- TO DO: embed cupertino video -->
+<iframe width="560" height="315" src="{{site.youtube-site}}/embed/3PdUaidHc-E?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## UI Basics
 
@@ -158,20 +164,20 @@ create buttons, react to on-press events, display lists, grids, and more.
 
 Usually, when you implement your SwiftUI app, you begin with **App:**
 
-<!-- TO DO: add code except -->
-
+<!-- TO DO: delete if dont use -->
+<!-- <?code-excerpt "lib/swiftui/MyApp.swift (CustomButton)"?> -->
 ```swift
-struct FooApp: App {
-var body: some Scene {
-    WindowGroup { 
-        HomePage() 
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            HomePage()
+        }
     }
-}
 }
 ```
 
 The body is usually created in a struct that conforms to the **View** protocol as follows:
-<!-- TO DO: add code except -->
 
 ```swift
 struct HomePage: View {
@@ -181,29 +187,25 @@ struct HomePage: View {
 }
 ```
 
-
 In Flutter, to begin you pass in an instance of your app to the `runApp` function. 
 
-<!-- TO DO: add code except -->
+<?code-excerpt "lib/get_started.dart (main)"?>
 ```dart
 void main() {
   runApp(
-    // create an instance of our app
-    // and pass it to the runApp function
     const App(),
   );
 }
 ```
 
-
 `App` is itself a widget, and the build method describes the part of the user interface it represents.
-It’s common to begin your app with a [`WidgetApp`][] class, usually [`MaterialApp`][] or [`CupertinoApp`][].
+It’s common to begin your app with a [`WidgetApp`][] class, like [`CupertinoApp`][].
 
 
-<!-- TO DO: add code except -->
+<?code-excerpt "lib/get_started.dart (myapp)"?>
 ```dart
-class App extends StatelessWidget {
-  const App({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -216,19 +218,19 @@ class App extends StatelessWidget {
 }
 ```
 
-For apps using Cupertino, the widget used in `home` likely begins with a [`CupertinoPageScaffold`][] class 
+The widget used in `home` might begin with the `Scaffold` class 
 that accepts a widget as its body:
 
-<!-- TO DO: add code except -->
+<?code-excerpt "lib/get_started.dart (homepage)"?>
 ```dart
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
+    return  CupertinoPageScaffold(
+      child: Center(
+        body: Text(
           'Hello, World!',
         ),
       ),
@@ -237,12 +239,12 @@ class HomePage extends StatelessWidget {
 }
 ```
 
+Test out the complete example on DartPad: [Get Started Example][].
+
 One thing to note is the use of the [`Center`][] widget. In SwiftUI, 
 a view's contents are rendered in its center by default, 
 but in Flutter that’s not always the case. In the example, 
-the `HomePage` widget uses the `Scaffold` widget. 
-[`Scaffold`][] implements the basic Material Design visual layout structure, 
-so you can easily start building a beautiful app.  
+the `Scaffold` widget implements a basic layout structure for an app.
 However, `Scaffold` doesn’t render its `body` widget at the center of the screen. 
 So, to center the text, you have to wrap it with a `Center` widget. 
 You can learn more about the different widgets and their default behaviors 
@@ -253,7 +255,6 @@ by looking through the [Widget catalog][].
 
 In SwiftUI, you create a button using the `Button` struct, as shown here:
 
-<!-- TO DO: add code except -->
 ```swift
     Button("Do something") {
       // this closure gets called when your
@@ -261,23 +262,24 @@ In SwiftUI, you create a button using the `Button` struct, as shown here:
     }
 ```
 
-To achieve the same  you can use the `TextButton` class, as follows:
+To achieve the same  you can use the `CupertinoButton` class, as follows:
 
-<!-- TO DO: add code except -->
+<?code-excerpt "lib/text_button.dart (textbutton)"?>
 ```dart
-TextButton(
+CupertinoButton(
           onPressed: () {
             // this closure gets called when your button is tapped
           },
           child: const Text('Do something'),
-        )
+        ),
 ```
 
 In SwiftUI if you want a button, then you must use the `Button` struct. 
 But with Flutter you have access to a variety of buttons with predefined styles. 
-The `[TextButton`][] class comes from the Material library 
-that was previously referenced, and exhibits material styling.
+The [`CupertinoButton`][] class comes from the Cupertino library 
+that was previously referenced, and exhibits Apple's styling.
 
+Test out the complete example on DartPad: [Button Example][].
 
 ### Aligning components horizontally
 
@@ -290,7 +292,7 @@ That's why there are two separate structures that allow you to create stacks:
 
 The following SwiftUI view adds a globe image and a text to a horizontal stack view:
 
-<!-- TO DO: add code except -->
+
 ```swift
   HStack {
     Image(systemName: "globe")
@@ -301,19 +303,26 @@ The following SwiftUI view adds a globe image and a text to a horizontal stack v
 The equivalent of `HStack` in Flutter is [`Row`][],
 which lays out its children horizontally:
 
-<!-- TO DO: add code except -->
+<?code-excerpt "lib/row.dart (row)"?>
 ```dart
 Row(
-    children: const [
-      Icon(Icons.credit_card),
-      Text('Hello, world!'),
-    ],
-  ),
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: const [
+    Icon(CupertinoIcons.globe),
+    Text('Hello, world!'),
+  ],
+),
 ```
 
 In Flutter, the `Row` widget explicitly requires the 
 `children` parameter, 
-and expects a `List<Widget>`.
+and expects a `List<Widget>`.The `mainAxisAlignment` 
+property tells Flutter how to position children 
+with extra space. `MainAxisAlignment.center` means that 
+children are positioned in the middle of the main axis. 
+For `Row` the main axis is the horizontal axis.
+
+Test out the complete example on DartPad: [Row Example][].
 
 
 ### Aligning components vertically
@@ -321,8 +330,6 @@ and expects a `List<Widget>`.
 The following example builds on the previous, 
 but this time arranging the components vertically using `VStack`:
 
-
-<!-- TO DO: add code except -->
 ```swift
     VStack {
       Image(systemName: "globe")
@@ -333,14 +340,15 @@ but this time arranging the components vertically using `VStack`:
 In Flutter– all your Dart code stays the same as the previous example, 
 except for changing `Row` to [`Column`][]:
 
-<!-- TO DO: add code except -->
+<?code-excerpt "lib/column.dart (column)" ?>
 ```dart
 Column(
-        children: const [
-          Icon(Icons.credit_card),
-          Text('Hello, world!'),
-        ],
-      ),
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: const [
+      Icon(CupertinoIcons.globe),
+      Text('Hello, world!'),
+    ],
+  ),
 ```
 
 
@@ -351,54 +359,70 @@ Many times, you have a list of model objects you want to display to the user.
 In those cases, you need to ensure that your model objects 
 are identifiable using the `Identifiable` protocol as follows:
 
-<!-- TO DO: add code excerpt -->
 ```swift
-var persons = [
-  "Person 1",
-  "Person 2",
-  "Person 3",
-]
+struct Person: Identifiable {
+  var name: String
+}
 
 struct ListWithPersons: View {
   let persons: [Person]
   var body: some View {
     List {
       ForEach(persons) { person in
-        Text(person)
+        Text(person.name)
       }
     }
   }
 }
+
+var persons = [
+  Person(name: "Person 1"),
+  Person(name: "Person 2"),
+  Person(name: "Person 3"),
+]
 ```
 
 This is similar to how Flutter prefers to build its list widgets, 
 although Flutter doesn't need the list items to be identifiable. 
-All you have to do is specify the number of items to display and build a widget for each item.
+All you have to do is specify the number of items to display 
+and build a widget for each item.
 
-<!-- TO DO: add code excerpt -->
+<?code-excerpt "lib/list.dart (SimpleList)" ?>
 ```dart
-const items = [
-  'Person 1',
-  'Person 2',
-  'Person 3',
+// create a class that holds each person's data
+class Person {
+  String name;
+  Person(this.name);
+}
+
+var items = [
+   Person('Person 1'),
+   Person('Person 2'),
+   Person('Person 3'),
 ];
 
-…
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-ListView.builder(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(items[index]),
+            title: Text(items[index].name),
           );
         },
       ),
     );
+  }
+}
 ```
 
 There are a few things to note about this example in Flutter:
 
-* The `ListView` widget has a builder method, 
+* The [`ListView`] widget has a builder method, 
 this operates in a similar way 
 to the ForEach inside of SwiftUI's `List` struct
 
@@ -406,24 +430,23 @@ to the ForEach inside of SwiftUI's `List` struct
 dictates how many items need to be displayed and 
 rendered by the `ListView`.
 
-* The `itemBuilder` then gets called with an index from 
+* The `itemBuilder` gets called with an index from 
 (and including) 0, up to (and excluding) the item 
 count—and must return a `Widget` instance per item.
 
-In this example, a `ListTile` is returned for each item. 
+In this example, a [`ListTile`] is returned for each item. 
 The `ListTile` widget has some intrinsic properties 
 like height and font-size that might be helpful 
 in building a list. However, you're able to return 
 almost any widget that represents your data.
 
+Test out the complete example on DartPad: [List Example][].
 
 ### Displaying a grid
 
 In SwiftUI, when constructing non-conditional 
 grids, you use `Grid` with `GridRow`. 
 
-
-<!-- TO DO: add code excerpt -->
 ```swift
     Grid {
       GridRow {
@@ -439,13 +462,13 @@ grids, you use `Grid` with `GridRow`.
     }
 ```
 
-To display grids in Flutter, you use the `GridView` widget. 
+To display grids in Flutter, you use the [`GridView`] widget. 
 This widget has various constructors, 
 each of which achieves more or less the same goal 
 but with different input parameters. 
 This example uses the `.builder()` initializer:
 
-<!-- TO DO: add code excerpt -->
+<?code-excerpt "lib/grid.dart (GridExample)" ?>
 ```dart
 const widgets = [
   Text('Row 1'),
@@ -455,8 +478,14 @@ const widgets = [
   Icon(Icons.download),
   Icon(Icons.upload),
 ];
-… 
-GridView.builder(
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           mainAxisExtent: 40.0,
@@ -464,7 +493,9 @@ GridView.builder(
         itemCount: widgets.length,
         itemBuilder: (context, index) => widgets[index],
       ),
-    )
+    );
+  }
+}
 ```
 
 The `SliverGridDelegateWithFixedCrossAxisCount` 
@@ -479,28 +510,17 @@ is that in SwiftUI the `Grid` is fed with instances of `GridRow`,
 but in Flutter `GridView` uses the delegate to decide 
 how the grid should lay out its components.
 
-The term axis is something that you'll come across often 
-on your journey to learn Flutter. 
-Within a widget, the main and cross axes depend on 
-the behavior of that widget. 
-For example, with `GridView`, the main axis is vertical 
-because they lay out their rows vertically, 
-and the cross axis is therefore horizontal. 
-There are different properties that are associated 
-with the axes which can be used to space out widgets. 
-For more information, check out [Axis size and alignment][] 
-in [Basic Flutter layout concepts][].
+Test out the complete example on DartPad: [Grid Example][].
 
 
 ### Creating a scroll view
 
 In SwiftUI, to create custom scrolling components, 
 you would use `ScrollView`. 
-For example, to display a series of `User` 
-struct instances on the screen in a vertically scrollable fashion. 
+For example, to display a series of `PersonView` 
+ instances on the screen in a vertically scrollable fashion. 
 
 
-<!-- TO DO: add code excerpt -->
 ```swift
     ScrollView {
       VStack(alignment: .leading) {
@@ -511,9 +531,13 @@ struct instances on the screen in a vertically scrollable fashion.
     }
 ```
 
-The closest equivalent of `ScrollView` in Flutter is [`SingleChildScrollView`]:
+The closest equivalent of `ScrollView` in Flutter is 
+`SingleChildScrollView`][]. 
+In the following example, the function `mockPerson` mocks up instances 
+'of the defined `Person` class to 
+create the custom `PersonView` widget. 
 
-<!-- TO DO: add code excerpt -->
+<?code-excerpt "lib/scroll.dart (ScrollExample)" ?>
 ```dart
 SingleChildScrollView(
         child: Column(
@@ -526,8 +550,10 @@ SingleChildScrollView(
               .toList(),
         ),
       ),
-    );
 ```
+
+Test out the complete example on DartPad: [Scroll Example][].
+
 
 ### Responsive & adaptive design
 
@@ -539,7 +565,7 @@ that tell you if the size class is `.regular` or `.compact`.
 
 In Flutter, you can take a similar approach 
 using the [`LayoutBuilder`] class to get the `BoxConstraints` object, 
-or the [`MediaQuer.of()`] in your build functions to get the size and 
+or the [`MediaQuery.of()`] in your build functions to get the size and 
 orientation of your current app. For more information, check out 
 [Creating responsive and adaptive apps][]. 
 
@@ -549,7 +575,7 @@ orientation of your current app. For more information, check out
 In SwiftUI, the `@State` property wrapper is used to represent the 
 internal state of a SwiftUI view, as follows: 
 
-<!-- TO DO: add code excerpt -->
+
 ```swift
 struct ContentView: View {
   @State private var counter = 0;
@@ -574,15 +600,15 @@ telling the framework to redraw the widget.
 The following example shows components of a similar 
 counter app to the one created previously:
 
-<!-- TO DO: add code excerpt -->
+<?code-excerpt "lib/state.dart (State)" ?>
 ```dart
-class CounterWidget extends StatefulWidget {
-  const CounterWidget({super.key});	      
+class MyHomePage extends  [!StatefulWidget!] {
+  const MyHomePage({super.key});	      
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  [!State<MyHomePage> createState() => _MyHomePageState()!];
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class [!_MyHomePageState extends State<MyHomePage>!] {
   int _counter = 0;
 
   @override
@@ -594,7 +620,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text('$_counter'),
             TextButton(
-          onPressed: () => setState(() { _counter++; }),
+          onPressed: () => [!setState(() { _counter++; })!],
           child: Text("+"),
         ),
           ],
@@ -605,33 +631,32 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
-For information on other ways to manage state, see [State management][].
+Test the complete example on DartPad: [State Example][]. For information on other ways to manage state, see [State management][].
 
 ### Animations
 
 There are two main types of UI animations. Implicit, 
 which have a current and new value to animate to. And explicit, 
-which animate when explicity asked to.
+which animate when explicitly asked to.
 
 In SwiftUI implicit animations are handled by the `animate()` modifier, 
 as follows:
 
-<!-- TO DO: add code excerpt -->
 ```swift
 Button(“Tap me!”){
    angle += 45
 }
 .rotationEffect(.degrees(angle))
-.animation(.easeIn)
+.animation(.easeIn(duration: 1))
 ```
 
 In Flutter, there are built-in widgets that make it easy to 
 implicitly animate commonly used widgets. These are named `AnimatedFoo`. 
 For example, to rotate a button you can use the 
 [`AnimatedRotation`][] class, which animates the 
-['Transform.rotate`][] widget.
+'Transform.rotate` widget.
 
-<!-- TO DO: add code excerpt -->
+<?code-excerpt "lib/simple_animation.dart (AnimatedButton)" ?>
 ```dart
 AnimatedRotation(
   turns: turns,
@@ -645,10 +670,12 @@ AnimatedRotation(
   )
 ```
 
+Test out the full example on DartPad: [Animation Example][].
+
 SwiftUI and Flutter take a similar approach, 
-where you can specify parameters like [duration][], and [curve][]. 
+where you can specify parameters like `duration`, and `curve`. 
 If there's no built in widget for what you're trying to do, 
-you can use the [TweenAnimationBuilder][] to easily 
+you can use the [`TweenAnimationBuilder`][] to easily 
 compose an animated widget.
 
 When it comes to explicit animations, 
@@ -749,7 +776,7 @@ and contains `NavigationLink` structs.
 The next example creates an application that displays a list of persons, 
 and tapping on each person display's the person's details in a new navigation link. 
 
-<!-- TO DO: add code excerpt -->
+
 ```swift
 NavigationStack(path: $path) {
       List {
@@ -766,24 +793,27 @@ NavigationStack(path: $path) {
     }
 ```
 
-In Flutter, small applications without complex deep linking can use [Navigator][] 
+In Flutter, small applications without complex deep linking can use [`Navigator`][] 
 with named routes, as shown below. After defining your navigation routes, 
 you can call upon your navigation routes using their names. 
 
 First, you name your define your routes in the class passed to the 
 `runApp()` function, in this case `App`:
 
-<!-- TO DO: add code excerpt -->
+<?code-excerpt "lib/navigation.dart" (Routes)?>
 ```dart
 // define route name as a constant
 // so it is reusable
 const detailsPageRouteName = '/details';
 
 class App extends StatelessWidget {
+  const App({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      debugShowCheckedModeBanner: false,
       home: const HomePage(),
       // routes property defines the available named routes 
       // and the widgets to build when navigating to those routes
@@ -794,13 +824,14 @@ class App extends StatelessWidget {
   }
 }
 ```
+
 The following sample generates a list of persons 
 mocked using `mockPersons()`.
 Once the user taps on any person, `pushNamed()` pushes the person's detail page 
 to the `Navigator`.
 
-<!-- TO DO: add code excerpt -->
-```swift
+<?code-excerpt "lib/navigation.dart" (ListView)?>
+```dart
  ListView.builder(
     itemCount: mockPersons.length,
     itemBuilder: (context, index) {
@@ -814,22 +845,24 @@ to the `Navigator`.
         ),
         onTap: () {
           // when a ListTile that represents a person is
-          // tapped, the detailsPageRouteName route
-          // is pushed to the Navigator and 
-          // and the person instance is passed to the route
+          // tapped, push the detailsPageRouteName route
+          // to the Navigator and pass the person's instance
+          // to the route
           Navigator.of(context).pushNamed(
             detailsPageRouteName,
             arguments: person,
           );
         },
       );
+    },
+  ),
 ```
 Next you'll define the `DetailsPage` widget responsible for 
 displaying the details of each person. In Flutter, arguments can be 
 dynamically passed into the widget, when navigating to the new route, 
 and extracted using `ModalRoute.of()`:
 
-<!-- TO DO: add code excerpt and test that the code change works-->
+<?code-excerpt "lib/navigation.dart" (DetailsPage)?>
 ```dart
 class DetailsPage extends StatelessWidget {
   const DetailsPage({Key? key}) : super(key: key);
@@ -842,15 +875,13 @@ class DetailsPage extends StatelessWidget {
     )?.settings.arguments as Person;
     // extract the age
     final age = '${person.age} years old';
-    return 
-          // use a ListTile to display the person's
-          // details since it already has a good layout
-          ListTile(
-            title: Text(person.name),
-            subtitle: Text(age),
+    return Scaffold(
+      // display name and age
+      body:Column(children:[Text(person.name), Text(age)]),
     );
   }
 }
+
 ```
 
 For more advanced navigation and routing requirements, 
@@ -916,6 +947,8 @@ CupertinoButton(
     );
   },
 ```
+
+
 
 
 <!-- UKkit ---- -->
@@ -3190,3 +3223,8 @@ plugin documentation.
 [widget catalog]: {{site.url}}/development/ui/widgets/layout
 [`Window.locale`]: {{site.api}}/flutter/dart-ui/Window/locale.html
 [write your own]: {{site.url}}/development/packages-and-plugins/developing-packages
+
+[Flutter Website Github Samples]: https://github.com/flutter/website/tree/main/examples
+[Understanding constraints]: {{site.url}}/development/ui/layout/constraints
+[WidgetApp]: {{site.api}}/flutter/widgets/WidgetsApp-class.html
+[CupertinoApp]: {{site.api}}/flutter/cupertino/CupertinoApp-class.html
