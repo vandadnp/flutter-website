@@ -199,9 +199,6 @@ In Flutter, to begin you pass in an instance of your app to the `runApp` functio
 
 <?code-excerpt "lib/get_started.dart (main)"?>
 ```dart
-void main() {
-  runApp(const MyApp());
-}
 ```
 
 `App` is itself a widget, and the build method describes the part of the user interface it represents.
@@ -220,18 +217,6 @@ It’s common to begin your app with a [`WidgetApp`][] class, like [`CupertinoAp
 
 <?code-excerpt "lib/get_started.dart (myapp)"?>
 ```dart
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // the widget returned here is a CupertinoApp
-    // that has the look and feel of an iOS app by default
-    return CupertinoApp(
-      home: const HomePage(),
-    );
-  }
-}
 ```
 
 The widget used in `home` might begin with the `Scaffold` class 
@@ -250,20 +235,6 @@ that accepts a widget as its body:
 
 <?code-excerpt "lib/get_started.dart (homepage)"?>
 ```dart
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          'Hello, World!',
-        ),
-      ),
-    );
-  }
-}
 ```
 
 One thing to note is the use of the [`Center`][] widget. In SwiftUI, 
@@ -303,7 +274,6 @@ To achieve the same  you can use the `CupertinoButton` class, as follows:
 
 <?code-excerpt "lib/text_button.dart (textbutton)"?>
 ```dart
-
 ```
 
 In SwiftUI if you want a button, then you must use the `Button` struct. 
@@ -384,7 +354,6 @@ except for changing `Row` to [`Column`][]:
 
 <?code-excerpt "lib/column.dart (column)" ?>
 ```dart
-
 ```
 
 
@@ -520,7 +489,6 @@ you would use `ScrollView`.
 For example, to display a series of `PersonView` 
  instances on the screen in a vertically scrollable fashion. 
 
-
 ```swift
     ScrollView {
       VStack(alignment: .leading) {
@@ -551,8 +519,6 @@ create the custom `PersonView` widget.
 ```dart
 ```
 
-
-
 ### Responsive & adaptive design
 
 In SwiftUI, you often use `GeometryReader` to create relative view sizes. 
@@ -572,7 +538,6 @@ orientation of your current app. For more information, check out
 
 In SwiftUI, the `@State` property wrapper is used to represent the 
 internal state of a SwiftUI view, as follows: 
-
 
 ```swift
 struct ContentView: View {
@@ -666,7 +631,7 @@ If there's no built in widget for what you're trying to do,
 you can use an `AnimatedWidget` for a standalone widget, 
 or `AnimatedBuilder` in another widget’s build method
 
-To learn more about animations in Flutter, see [Flutter Animations][].
+To learn more about animations in Flutter, see [Animations overview][].
 
 ### Drawing on the Screen
 
@@ -3346,8 +3311,23 @@ plugin documentation.
 [widget catalog]: {{site.url}}/development/ui/widgets/layout
 [`Window.locale`]: {{site.api}}/flutter/dart-ui/Window/locale.html
 [write your own]: {{site.url}}/development/packages-and-plugins/developing-packages
-
-[Flutter Website Github Samples]: https://github.com/flutter/website/tree/main/examples
 [Understanding constraints]: {{site.url}}/development/ui/layout/constraints
-[WidgetApp]: {{site.api}}/flutter/widgets/WidgetsApp-class.html
-[CupertinoApp]: {{site.api}}/flutter/cupertino/CupertinoApp-class.html
+[`WidgetApp`]: {{site.api}}/flutter/widgets/WidgetsApp-class.html
+[`CupertinoApp`]: {{site.api}}/flutter/cupertino/CupertinoApp-class.html
+[`Center`]: {{site.api}}/flutter/cupertino/Center-class.html
+[`CupertinoButton`]: {{site.api}}/flutter/cupertino/CupertinoButton-class.html
+[`Row`]: {{site.api}}/flutter/cupertino/Row-class.html
+[`ListView`]: {{site.api}}/flutter/cupertino/ListView-class.html
+[`ListTitle`]: {{site.api}}/flutter/cupertino/ListTitle-class.html
+[`GridView`]: {{site.api}}/flutter/cupertino/GridView-class.html
+[`SingleChildScrollView`]: {{site.api}}/flutter/cupertino/SingleChildScrollView-class.html
+[`LayoutBuilder`]: {{site.api}}/flutter/cupertino/LayoutBuilder-class.html
+[`AnimatedRotation`]: {{site.api}}/flutter/cupertino/AnimatedRotation-class.html
+[`TweenAnimationBuilder`]: {{site.api}}/flutter/cupertino/TweenAnimationBuilder-class.html
+[`RotationTransition`]: {{site.api}}/flutter/cupertino/RotationTransition-class.html
+[`Navigator`]: {{site.api}}/flutter/cupertino/Navigator-class.html
+[`StatefulWidget`]: {{site.api}}/flutter/cupertino/StatefulWidget-class.html
+[State management]:  {{site.url}}/development/data-and-backend/state-mgmt
+[Wonderous]: https://flutter.gskinner.com/wonderous/?utm_source=flutterdocs&utm_medium=docs&utm_campaign=iosdevs
+[video_player]: {{site.pub-pkg}}/video_player
+[video_player example]: {{site.pub-pkg}}/video_player/example 
