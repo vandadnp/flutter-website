@@ -268,6 +268,8 @@ class HomePage extends StatelessWidget {
 }
 ```
 
+Test out the complete example on DartPad: [Get Started Example][].
+
 One thing to note is the use of the [`Center`][] widget. In SwiftUI, 
 a view's contents are rendered in its center by default, 
 but in Flutter that’s not always the case. In the example, 
@@ -436,6 +438,12 @@ struct ListWithPersons: View {
     }
   }
 }
+
+var persons = [
+  Person(name: "Person 1"),
+  Person(name: "Person 2"),
+  Person(name: "Person 3"),
+]
 ```
 
 This is similar to how Flutter prefers to build its list widgets, 
@@ -507,6 +515,7 @@ like height and font-size that might be helpful
 in building a list. However, you're able to return 
 almost any widget that represents your data.
 
+Test out the complete example on DartPad: [List Example][].
 
 ### Displaying a grid
 
@@ -637,6 +646,9 @@ create the custom `PersonView` widget.
 ),
 ```
 
+Test out the complete example on DartPad: [Scroll Example][].
+
+
 ### Responsive & adaptive design
 
 In SwiftUI, you often use `GeometryReader` to create relative view sizes. 
@@ -697,10 +709,10 @@ counter app to the one created previously:
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  [!State<MyHomePage> createState() => _MyHomePageState()!];
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class [!_MyHomePageState extends State<MyHomePage>!] {
   int _counter = 0;
 
   @override
@@ -725,7 +737,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
-For information on other ways to manage state, see [State management][].
+Test the complete example on DartPad: [State Example][]. For information on other ways to manage state, see [State management][].
 
 ### Animations
 
@@ -775,6 +787,8 @@ child: TextButton(
 }, child: Text('Tap me!')),
 )
 ```
+
+Test out the full example on DartPad: [Animation Example][].
 
 SwiftUI and Flutter take a similar approach, 
 where you can specify parameters like `duration`, and `curve`. 
@@ -1010,6 +1024,7 @@ class DetailsPage extends StatelessWidget {
     );
   }
 }
+
 ```
 
 For more advanced navigation and routing requirements, 
