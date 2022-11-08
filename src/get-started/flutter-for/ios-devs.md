@@ -222,6 +222,18 @@ It’s common to begin your app with a [`WidgetApp`][] class, like [`CupertinoAp
 
 <?code-excerpt "lib/get_started.dart (myapp)"?>
 ```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // the widget returned here is a CupertinoApp
+    // that has the look and feel of an iOS app by default
+    return CupertinoApp(
+      home: const HomePage(),
+    );
+  }
+}
 ```
 
 The widget used in `home` might begin with the `Scaffold` class 
@@ -424,12 +436,6 @@ struct ListWithPersons: View {
     }
   }
 }
-
-var persons = [
-  Person(name: "Person 1"),
-  Person(name: "Person 2"),
-  Person(name: "Person 3"),
-]
 ```
 
 This is similar to how Flutter prefers to build its list widgets, 
