@@ -28,9 +28,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       child: Center(
-        child: 
-        // docregion Image
-        Image.asset(
+        child:
+            // docregion Image
+            Image.asset(
           "images/Blueberries.jpg",
           width: 200,
           height: 200,
@@ -40,4 +40,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
