@@ -31,7 +31,7 @@ class App extends StatelessWidget {
     );
   }
 }
-// #docregion Routes
+// #enddocregion Routes
 
 // create a class that holds each person's data
 @immutable
